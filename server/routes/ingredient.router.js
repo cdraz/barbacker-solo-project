@@ -9,7 +9,7 @@ const axios = require('axios');
  */
 router.get('/', (req, res) => {
   // GET all ingredients from the third party api
-  console.log('in /api/ingredients');
+  console.log('in /api/ingredient');
   // axios.get(`www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/list.php?i=list`)
 
 });
