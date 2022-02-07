@@ -13,7 +13,7 @@ CREATE TABLE "bar_ingredients" (
     "id" SERIAL PRIMARY KEY,
     "userId" INT NOT NULL,
     "apiID" INT NOT NULL,
-    "apiString" VARCHAR(255) NOT NULL;
+    "apiString" VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE "saved_api_recipes" (
