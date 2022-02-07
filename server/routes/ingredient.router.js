@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   axios.get(`https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/list.php?i=list`)
   .then( apiRes => {
     console.log('api response received in get /ingredient');
-    res.send(apiRes.data);
+    res.send(apiRes.data.drinks);
   })
   .catch( err => {
     console.error('error in get /ingredient', err);

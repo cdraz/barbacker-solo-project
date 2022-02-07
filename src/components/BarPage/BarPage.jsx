@@ -5,22 +5,35 @@ import { useSelector, useDispatch } from 'react-redux';
 function BarPage() {
 
     // Store access, dispatch hook
-    const ingredients = useSelector(store => store.ingredientsReducer);
+    const ingredients = useSelector(store => store.cocktaildb.ingredientsReducer.data);
     const dispatch = useDispatch();
 
-    // Declare onGetIngredients
-    const onGetIngredients = () => {
+    // Declare getIngredients
+    const getIngredients = () => {
         dispatch({
             type: 'GET_INGREDIENTS'
         });
     }
+
+    // Call getIngredients on component load
+    useEffect(() => {
+        getIngredients();
+    }, []);
+
     return (
         <div>
-        <h3>Bar Page</h3>
-        <button onClick={onGetIngredients}>Get ingredients</button>
-        <select>
+            <h3>Bar Page</h3>
             
-        </select>
+                    { Array.isArray(ingredients) ? 
+                    <select>
+                        {ingredients.map(ingredient => (
+                            <option value={ingredient.strIngredient1}>
+                                {ingredient.strIngredient1}
+                            </option>
+                        ))}
+                    </select>
+                    : <p>Loading ingredients...</p>}
+            
         </div>
     )
 }
