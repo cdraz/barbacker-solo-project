@@ -20,6 +20,26 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     .catch( err => console.error( 'Error in GET /api/bar', err ));
 });
 
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+    // DELETE ingredient from Postgres where id and user match request
+    console.log(`in DELETE /api/bar/${req.params.id}`);
+
+    // Write SQL query
+    const queryText = `
+        DELETE FROM "bar_ingredients"
+        WHERE "userId" = $1 AND id = $2;
+    `
+    const queryParams = [
+        req.user.id, // $1
+        req.params.id // $2
+    ]
+
+    // Delete from Postgres
+    pool.query(queryText, queryParams)
+    .then( dbRes => res.sendStatus(201) )
+    .catch( err => console.error(`Error in DELETE /api/bar/${req.params.id}`, err) );
+});
+
 router.post('/', rejectUnauthenticated, (req, res) => {
     // POST ingredients from API to bar. Need to GET the IDs then send ID and string to Postgres
     console.log( 'in POST /api/bar' );

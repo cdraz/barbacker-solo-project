@@ -1,6 +1,20 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
+function* deleteBarIngredient(action) {
+    try {
+        // Delete request and send id as parameter
+        yield axios.delete(`/api/bar/${action.payload}`);
+        // After delete, get bar ingredients
+        yield put({
+            type: 'GET_BAR_INGREDIENTS'
+        });
+    }
+    catch(err) {
+        console.error('Error with deleteBarIngredient', err);
+    }
+}
+
 function* getBarIngredients() {
     try {
         let response = yield axios.get('/api/bar');
@@ -29,8 +43,9 @@ function* postBarIngredients(action) {
 }
 
 function* barSaga() {
-    yield takeLatest('POST_BAR_INGREDIENTS', postBarIngredients);
+    yield takeLatest('DELETE_BAR_INGREDIENT', deleteBarIngredient);
     yield takeLatest('GET_BAR_INGREDIENTS', getBarIngredients);
+    yield takeLatest('POST_BAR_INGREDIENTS', postBarIngredients);
 }
 
 export default barSaga;

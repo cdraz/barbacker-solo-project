@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import BarIngredient from './BarIngredient/BarIngredient';
 
 // Material UI imports
 import Autocomplete from '@mui/material/Autocomplete';
@@ -71,7 +72,7 @@ function BarPage() {
             <ul>
                 {Array.isArray(barIngredients) ?
                     barIngredients.map(ingredient => (
-                        <li key={ingredient.id}> {ingredient.apiString} </li>
+                        <BarIngredient ingredient={ingredient} key={ingredient.id}/>
                     ))
                     : <li>Loading user ingredients...</li>
                 }
