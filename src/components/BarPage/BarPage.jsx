@@ -10,23 +10,16 @@ function BarPage() {
 
     // Store access, dispatch hook
     const ingredients = useSelector(store => store.cocktaildb.ingredientsReducer);
+    const barIngredients = useSelector(store => store.bar.userIngredientsReducer);
     const dispatch = useDispatch();
-    const userIngredients = ['Bourbon', 'Sugar', 'Sweet Vermouth']
 
-    // Declare getIngredients
-    const getIngredients = () => {
-        dispatch({
-            type: 'GET_INGREDIENTS'
-        });
-    }
-
-    // Set state variable
-    const [ formInput, setFormInput ] = useState([]);
+    // Set state variables
+    const [formInput, setFormInput] = useState([]);
 
     // Declare handleSubmit
     const handleSubmit = event => {
         event.preventDefault();
-        console.log('in handleSubmit', formInput );
+        console.log('in handleSubmit', formInput);
         // Dispatch our submitted inputs to our Saga to POST to Postgres
         dispatch({
             type: 'POST_BAR_INGREDIENTS',
@@ -40,15 +33,18 @@ function BarPage() {
         // Turn our selected options into an array
         let array = [...event.target.selectedOptions]
         // Map our array to get the values for our form input
-        setFormInput(array.map( option => (
+        setFormInput(array.map(option => (
             option.innerText
         )));
     }
 
     // Call getIngredients on component load
-    // useEffect(() => {
-    //     getIngredients();
-    // }, []);
+    useEffect(() => {
+        // Get ingredients from API for add form
+        // dispatch({ type: 'GET_INGREDIENTS' });
+        // Get ingredients from Postgres for current user bar
+        dispatch({ type: 'GET_BAR_INGREDIENTS' });
+    }, []);
 
     // concurrent axios requests 
     // look into caching for using the requests
@@ -73,12 +69,12 @@ function BarPage() {
             </form>
             <h5> My Bar</h5>
             <ul>
-                {Array.isArray(userIngredients) ?
-                userIngredients.map( ingredient => (
-                    <li key={ingredient}> {ingredient} </li>
-                ))
-                : <li>Loading user ingredients...</li>
-            }
+                {Array.isArray(barIngredients) ?
+                    barIngredients.map(ingredient => (
+                        <li key={ingredient.id}> {ingredient.apiString} </li>
+                    ))
+                    : <li>Loading user ingredients...</li>
+                }
             </ul>
         </div>
     )
