@@ -8,6 +8,7 @@ const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
 
 // Route includes
+const barRouter = require('./routes/bar.router');
 const userRouter = require('./routes/user.router');
 const ingredientsRouter = require('./routes/ingredient.router');
 
@@ -23,6 +24,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /* Routes */
+app.use('/api/bar', barRouter);
 app.use('/api/user', userRouter);
 app.use('/api/ingredient', ingredientsRouter);
 

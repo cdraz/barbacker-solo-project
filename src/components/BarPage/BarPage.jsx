@@ -27,6 +27,11 @@ function BarPage() {
     const handleSubmit = event => {
         event.preventDefault();
         console.log('in handleSubmit', formInput );
+        // Dispatch our submitted inputs to our Saga to POST to Postgres
+        dispatch({
+            type: 'POST_BAR_INGREDIENTS',
+            payload: formInput
+        });
     }
 
     // Declare handleChange
