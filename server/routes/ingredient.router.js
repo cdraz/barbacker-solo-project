@@ -3,11 +3,14 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 const axios = require('axios');
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
 
 /**
  * GET route template
  */
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
   // GET all ingredients from the third party api
   console.log('in /api/ingredient');
   // console.log('api key is', process.env.COCKTAIL_API_KEY);

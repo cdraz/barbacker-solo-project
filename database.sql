@@ -12,7 +12,6 @@ CREATE TABLE "user" (
 CREATE TABLE "bar_ingredients" (
     "id" SERIAL PRIMARY KEY,
     "userId" INT NOT NULL,
-    "apiID" INT NOT NULL,
     "apiString" VARCHAR(255) NOT NULL
 );
 
