@@ -6,9 +6,6 @@ const {
     rejectUnauthenticated,
   } = require('../modules/authentication-middleware');
 
-/**
- * GET route template
- */
 router.get('/', (req, res) => {
     // GET all ingredients from the third party api
     console.log('in GET /api/bar');
@@ -23,12 +20,8 @@ router.get('/', (req, res) => {
 
 });
 
-/**
- * POST route template
- */
-// POST ingredients from API to bar. Need to GET the IDs then send ID and string to Postgres
 router.post('/', rejectUnauthenticated, (req, res) => {
-    // POST route code here
+    // POST ingredients from API to bar. Need to GET the IDs then send ID and string to Postgres
     console.log('in POST /api/bar');
     
     // For each ingredient sent over, post to Postgres
@@ -47,8 +40,8 @@ router.post('/', rejectUnauthenticated, (req, res) => {
             queryText +=', ';
         }
     }
-    // console.log(queryText);
-    // console.log(queryParams);
+
+    // Post to Posgres
     pool.query(queryText, queryParams)
     .then( dbRes => res.sendStatus(200))
     .catch( err => console.error('Error in POST /api/bar', err));
