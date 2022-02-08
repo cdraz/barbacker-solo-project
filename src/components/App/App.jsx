@@ -14,6 +14,7 @@ import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 import AboutPage from '../AboutPage/AboutPage';
+import BarPage from '../BarPage/BarPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
@@ -109,7 +110,13 @@ function App() {
               <LandingPage />
             }
           </Route>
+          <ProtectedRoute
+            exact
+            path="/bar">
+              
+              <BarPage />
 
+          </ProtectedRoute>
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
             <h1>404</h1>
