@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function* getIngredients() {
     try {
-        let response = yield axios.get('/api/ingredient');
+        let response = yield axios.get('/api/ingredients');
         // api returns an array of objects with the first property being the string of the ingredient
         // We want only an array of ingredient strings, so use .map() to return an array of just the strings    
         let payload = response.data.map( function(obj){
@@ -19,8 +19,21 @@ function* getIngredients() {
     } 
 }
 
+// getSearchResults will send requests to server asking for search results from cocktaildb api
+// based on query sent from client
+function* getSearchResults(action) {
+    console.log('in getSearchResults');
+    try {
+       let response = yield axios.get(`/api/recipes/search/${action.payload}`); 
+    }
+    catch(err) {
+        console.error('Error with getSearchResults:', err);
+    }
+}
+
 function* cocktaildbSaga() {
     yield takeLatest('GET_INGREDIENTS', getIngredients);
+    yield takeLatest('GET_SEARCH_RESULTS', getSearchResults);
 }
 
 export default cocktaildbSaga;

@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 // ingredientsReducer will hold all ingredients from cocktaildb api
 // and will be used for adding ingredients to user's bar
 const ingredientsReducer = ( state = ['Bourbon', 'Angostura Bitters', 'Sweet Vermouth', 'Sugar', 'Orange'], action ) => {
-    console.log('in ingredientsReducer');
     switch (action.type) {
         case 'SET_INGREDIENTS':
             return action.payload;
@@ -15,7 +14,6 @@ const ingredientsReducer = ( state = ['Bourbon', 'Angostura Bitters', 'Sweet Ver
 // searchResultsReducer will hold drink recipe results from cocktaildb api
 // will be rendered on search page
 const searchResultsReducer = ( state = [], action ) => {
-    console.log('in searchResultsReducer');
     switch(action.type) {
         case 'SET_SEARCH_RESULTS':
             return action.payload;

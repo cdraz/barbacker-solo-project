@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // This is one of our simplest components
 // It doesn't have local state,
@@ -6,6 +7,9 @@ import { useState } from 'react';
 // or even care what the redux state is'
 
 function SearchPage() {
+
+  // Dispatch hook
+  const dispatch = useDispatch();
 
   // Set state variable for search input
   const [searchInput, setSearchInput] = useState('');
@@ -20,6 +24,10 @@ function SearchPage() {
   const handleSubmit = event => {
     event.preventDefault();
     console.log('searchInput is:', searchInput);
+    dispatch({
+      type: 'GET_SEARCH_RESULTS',
+      payload: searchInput
+    });
   }
 
   return (
