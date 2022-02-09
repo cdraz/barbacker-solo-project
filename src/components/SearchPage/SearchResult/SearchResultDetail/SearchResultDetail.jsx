@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // MUI imports
 import Box from '@mui/material/Box';
@@ -7,13 +7,10 @@ import Typography from '@mui/material/Typography';
 
 function SearchResultDetail({ recipe }) {
     
-    // Dispatch hook
+    // Store access, dispatch hook
     const dispatch = useDispatch();
+    const 
 
-    // TODO: GET to cocktaildb api to get recipe details
-    useEffect( () => {
-
-    }, [])
     // Modal style setup
     const style = {
         position: 'absolute',
