@@ -22,9 +22,19 @@ const searchResultsReducer = ( state = [], action ) => {
     };
 };
 
+// detailsReducer will hold the details of the currently selected cocktail recipe from cocktaildb api
+const detailsReducer = ( state = {}, action ) => {
+    switch(action.type) {
+        case 'SET_SELECTED_RECIPE_DETAIL':
+            return action.payload;
+        default:
+            return state;
+    };
+};
 
 // Combine reducers and export
 export default combineReducers({
+    detailsReducer,
     ingredientsReducer,
     searchResultsReducer,
 });

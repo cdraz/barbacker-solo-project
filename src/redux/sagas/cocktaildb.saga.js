@@ -19,7 +19,22 @@ function* getIngredients() {
     } 
 }
 
-// getSearchResults will send requests to server asking for search results from cocktaildb api
+// getRecipeDetails sends request to server asking for full recipe details from cocktaildb api
+function* getRecipeDetails(action) {
+    console.log('in getRecipeDetails');
+    try {
+        let response = yield axios.get(`/api/recipes/detail/${action.payload}`);
+        yield put({
+            type: 'SET_SELECTED_RECIPE_DETAIL',
+            payload: response.data.drinks
+        })
+    }
+    catch(err) {
+        console.error('Error with getRecipeDetails:', err);
+    }
+}
+
+// getSearchResults sends request to server asking for search results from cocktaildb api
 // based on query sent from client
 function* getSearchResults(action) {
     console.log('in getSearchResults');
@@ -38,6 +53,7 @@ function* getSearchResults(action) {
 
 function* cocktaildbSaga() {
     yield takeLatest('GET_INGREDIENTS', getIngredients);
+    yield takeLatest('GET_SELECTED_RECIPE_DETAIL', getRecipeDetails);
     yield takeLatest('GET_SEARCH_RESULTS', getSearchResults);
 }
 

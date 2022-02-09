@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// This is one of our simplest components
-// It doesn't have local state,
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is'
+import SearchResult from './SearchResult/SearchResult';
+
+// Material UI imports
+import Grid from '@mui/material/Grid';
 
 function SearchPage() {
 
@@ -51,7 +51,13 @@ function SearchPage() {
             value="Search"
           />
         </form>
-        <button onClick={() => console.log(searchResults)}>Log search results</button>
+      </div>
+      <div>
+        { Array.isArray(searchResults) ? 
+          searchResults.map( recipe => (
+            <SearchResult key={recipe.id} recipe={recipe} />
+          )) 
+        : <p>No results to display.</p>}
       </div>
     </div>
   );

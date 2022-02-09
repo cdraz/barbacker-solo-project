@@ -8,9 +8,6 @@ const axios = require('axios');
  */
 router.get('/search/:q', (req, res) => {
   // GET route code here
-  console.log('in /api/recipes/search');
-  console.log('req.params.q is', req.params.q);
-  console.log('req.user is', req.user);
   axios({
     method: 'GET',
     url: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/filter.php?i=`,
@@ -20,6 +17,22 @@ router.get('/search/:q', (req, res) => {
   })
   .then(apiRes => res.send(apiRes.data) )
   .catch( err => console.error(`Error in GET /search/${req.params.q}`, err));
+});
+
+router.get('/detail/:id', (req, res) => {
+  // GET route code here
+  axios({
+    method: 'GET',
+    url: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/lookup.php?i=`,
+    params: {
+        i: req.params.id
+    }
+  })
+  .then(apiRes => {
+    console.log('details are', apiRes.data);
+    res.send(apiRes.data);
+  })
+  .catch( err => console.error(`Error in GET /detail/${req.params.i}`, err));
 });
 
 /**
