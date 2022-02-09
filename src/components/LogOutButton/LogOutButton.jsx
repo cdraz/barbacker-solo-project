@@ -11,7 +11,7 @@ function LogOutButton(props) {
       className={props.className}
       onClick={() => dispatch({ type: 'LOGOUT' })}
     >
-      Log Out
+      <img src="https://cdn-icons-png.flaticon.com/512/1286/1286853.png" alt="logout-button" style={{ height: 30, width: 30 }}/>
     </button>
   );
 }

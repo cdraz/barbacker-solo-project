@@ -13,12 +13,13 @@ import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
-import AboutPage from '../AboutPage/AboutPage';
+import SearchPage from '../SearchPage/SearchPage';
 import BarPage from '../BarPage/BarPage';
 import UserPage from '../UserPage/UserPage';
-import InfoPage from '../InfoPage/InfoPage';
+import InfoPage from '../DiscoverPage/DiscoverPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
+import RecipePage from '../RecipePage/RecipePage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
@@ -41,13 +42,13 @@ function App() {
           <Redirect exact from="/" to="/home" />
 
           {/* Visiting localhost:3000/about will show the about page. */}
-          <Route
-            // shows AboutPage at all times (logged in or not)
+          <ProtectedRoute
+            // shows SearchPage if logged in
             exact
-            path="/about"
+            path="/search"
           >
-            <AboutPage />
-          </Route>
+            <SearchPage />
+          </ProtectedRoute>
 
           {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:3000/user will show the UserPage if the user is logged in.
@@ -62,11 +63,19 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
+            // logged in shows DiscoverPage else shows LoginPage
             exact
-            path="/info"
+            path="/discover"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows RecipePage else shows LoginPage
+            exact
+            path="/recipes"
+          >
+            <RecipePage />
           </ProtectedRoute>
 
           <Route
