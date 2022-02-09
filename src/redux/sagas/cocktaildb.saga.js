@@ -24,7 +24,12 @@ function* getIngredients() {
 function* getSearchResults(action) {
     console.log('in getSearchResults');
     try {
-       let response = yield axios.get(`/api/recipes/search/${action.payload}`); 
+       let response = yield axios.get(`/api/recipes/search/${action.payload}`);
+       yield put({
+           type: 'SET_SEARCH_RESULTS',
+           // We only want the array of drinks that are returned so set those as state
+           payload: response.data.drinks
+       });
     }
     catch(err) {
         console.error('Error with getSearchResults:', err);

@@ -8,8 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function SearchPage() {
 
-  // Dispatch hook
+  // Dispatch hook, store access
   const dispatch = useDispatch();
+  const searchResults = useSelector( store => store.cocktaildb.searchResultsReducer);
 
   // Set state variable for search input
   const [searchInput, setSearchInput] = useState('');
@@ -50,6 +51,7 @@ function SearchPage() {
             value="Search"
           />
         </form>
+        <button onClick={() => console.log(searchResults)}>Log search results</button>
       </div>
     </div>
   );

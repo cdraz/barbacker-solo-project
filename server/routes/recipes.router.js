@@ -18,8 +18,8 @@ router.get('/search/:q', (req, res) => {
         i: req.params.q
     }
   })
-  .then( apiRes => console.log(apiRes.data) );
-
+  .then(apiRes => res.send(apiRes.data) )
+  .catch( err => console.error(`Error in GET /search/${req.params.q}`, err));
 });
 
 /**
