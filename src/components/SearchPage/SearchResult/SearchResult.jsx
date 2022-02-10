@@ -41,10 +41,7 @@ function SearchResult({ recipe }) {
         console.log('in onSave', details.fullDetails.strDrink, details.fullDetails.idDrink);
         dispatch({
             type: 'SAVE_RECIPE',
-            payload: {
-                id: details.fullDetails.idDrink,
-                name: details.fullDetails.strDrink
-            }
+            payload: details.fullDetails.idDrink
         });
     }
 

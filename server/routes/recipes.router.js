@@ -29,10 +29,12 @@ router.get('/detail/:id', (req, res) => {
     }
   })
   .then(apiRes => {
-    console.log('details are', apiRes.data);
     res.send(apiRes.data);
   })
-  .catch( err => console.error(`Error in GET /detail/${req.params.i}`, err));
+  .catch( err => {
+    console.error(`Error in GET /detail/${req.params.i}`, err);
+    res.sendStatus(500);
+  });
 });
 
 /**
@@ -40,6 +42,25 @@ router.get('/detail/:id', (req, res) => {
  */
 router.post('/', (req, res) => {
   // POST route code here
+  console.log('in POST /recipes, req.body is', req.body, 'req.user is', req.user);
+  // Write SQL query to save recipe to Postgres
+  const queryText = `
+    INSERT INTO saved_api_recipes ("apiId", "userId")
+    VALUES ($1, $2);
+  `;
+  const queryParams = [
+    req.body.id,
+    req.user.id
+  ];
+  pool.query(queryText, queryParams)
+  .then(dbRes => {
+    console.log('POST success in /api/recipes');
+    res.sendStatus(200);
+  })
+  .catch( err => {
+    console.error('Error in POST /api/recipes', err);
+    res.sendStatus(500);
+  });
 });
 
 module.exports = router;
