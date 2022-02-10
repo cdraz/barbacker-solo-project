@@ -6,6 +6,26 @@ const axios = require('axios');
 /**
  * GET route template
  */
+
+router.get('/', (req, res) => {
+  // GET current user's saved recipes from Postgres
+  // Write our SQL query
+  const queryText = `
+    SELECT * FROM "saved_api_recipes"
+    WHERE "userId" = $1;
+  `;
+  const queryParams = [ req.user.id ];
+  pool.query(queryText, queryParams)
+  .then( dbRes => {
+    console.log('GET /api/recipes success');
+    res.send(dbRes.rows);
+  })
+  .catch( err => {
+    console.error('Error in GET /api/recipes', err);
+    res.sendStatus(500);
+  })
+});
+
 router.get('/search/:q', (req, res) => {
   // GET route code here
   axios({
