@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 const userIngredientsReducer = ( state = [], action) => {
-    console.log('in userIngredientsReducer');
     switch (action.type) {
         case 'SET_BAR_INGREDIENTS':
             return action.payload;

@@ -1,15 +1,63 @@
-import React from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-// This is one of our simplest components
-// It doesn't have local state,
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is'
+import SearchResult from './SearchResult/SearchResult';
+
+// Material UI imports
+import Grid from '@mui/material/Grid';
 
 function SearchPage() {
+
+  // Dispatch hook, store access
+  const dispatch = useDispatch();
+  const searchResults = useSelector( store => store.cocktaildb.searchResultsReducer);
+
+  // Set state variable for search input
+  const [searchInput, setSearchInput] = useState('');
+
+  // Declare handleChange
+  const handleChange = event => {
+    console.log('in handleChange');
+    setSearchInput(event.target.value);
+  }
+
+  // Declare handleSubmit
+  const handleSubmit = event => {
+    event.preventDefault();
+    console.log('searchInput is:', searchInput);
+    dispatch({
+      type: 'GET_SEARCH_RESULTS',
+      payload: searchInput
+    });
+  }
+
   return (
     <div className="container">
       <div>
-        <p>This about page is for anyone to read!</p>
+        <h3>Search</h3>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="searchInput">
+            Search by ingredient
+          </label>
+          <input
+            id="searchInput"
+            type="text"
+            onChange={handleChange}
+            value={searchInput}
+            placeholder="Ingredient name"
+          />
+          <input
+            type="submit"
+            value="Search"
+          />
+        </form>
+      </div>
+      <div>
+        { Array.isArray(searchResults) ? 
+          searchResults.map( recipe => (
+            <SearchResult key={recipe.id} recipe={recipe} />
+          )) 
+        : <p>No results to display.</p>}
       </div>
     </div>
   );
