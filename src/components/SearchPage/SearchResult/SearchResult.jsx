@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // MUI imports
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -34,6 +35,18 @@ function SearchResult({ recipe }) {
         boxShadow: 24,
         p: 4,
     };
+
+    // Declare onSave
+    const onSave = () => {
+        console.log('in onSave', details.fullDetails.strDrink, details.fullDetails.idDrink);
+        dispatch({
+            type: 'SAVE_RECIPE',
+            payload: {
+                id: details.fullDetails.idDrink,
+                name: details.fullDetails.strDrink
+            }
+        });
+    }
 
     return (
         <>
@@ -89,9 +102,14 @@ function SearchResult({ recipe }) {
                                         <Typography component="p">
                                             {details.fullDetails.strInstructions}
                                         </Typography>
+                                        <Button
+                                            onClick={onSave}
+                                            variant="contained"
+                                        >
+                                            Save
+                                        </Button>
                                     </Grid>
                                 </Grid>
-
                             </>
                             : <p>Loading recipe...</p>
                     }
