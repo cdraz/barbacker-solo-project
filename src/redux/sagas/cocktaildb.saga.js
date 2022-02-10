@@ -26,7 +26,7 @@ function* getRecipeDetails(action) {
         let response = yield axios.get(`/api/recipes/detail/${action.payload}`);
         yield put({
             type: 'SET_SELECTED_RECIPE_DETAIL',
-            payload: response.data.drinks
+            payload: response.data.drinks[0]
         })
     }
     catch(err) {
