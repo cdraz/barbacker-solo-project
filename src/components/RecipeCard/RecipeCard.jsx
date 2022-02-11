@@ -15,9 +15,11 @@ import { CardActionArea } from '@mui/material';
 
 function RecipeCard({ recipe }) {
 
-    // Dispatch hook
+    // Dispatch hook and store access
     const dispatch = useDispatch();
     const details = useSelector(store => store.cocktaildb.detailsReducer);
+    const savedRecipes = useSelector(store => store.recipes.savedReducer);
+
 
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
@@ -43,7 +45,16 @@ function RecipeCard({ recipe }) {
             type: 'SAVE_RECIPE',
             payload: details.fullDetails.idDrink
         });
-    }
+    };
+
+    // Declare onRemove
+    const onRemove = () => {
+        console.log('in onRemove', details.fullDetails.strDrink, details.fullDetails.idDrink);
+        dispatch({
+            type: 'REMOVE_RECIPE',
+            payload: details.fullDetails.idDrink
+        });
+    };
 
     return (
         <>
@@ -87,24 +98,34 @@ function RecipeCard({ recipe }) {
                                     <Grid item>
                                         <Typography component="p">
                                             <ul>
-                                                {details.ingredients.map( ingredient => (
+                                                {details.ingredients.map(ingredient => (
                                                     ingredient.i ?
-                                                    <li>
-                                                        {ingredient.m}  {ingredient.i}
-                                                    </li>
-                                                    : null
+                                                        <li>
+                                                            {ingredient.m}  {ingredient.i}
+                                                        </li>
+                                                        : null
                                                 ))}
                                             </ul>
                                         </Typography>
                                         <Typography component="p">
                                             {details.fullDetails.strInstructions}
                                         </Typography>
-                                        <Button
-                                            onClick={onSave}
-                                            variant="contained"
-                                        >
-                                            Save
-                                        </Button>
+                                        {/* Check if the selected recipe is a saved recipe, if it is then render the remove button, if not render the save button */}
+                                        {savedRecipes.some(savedRecipe => savedRecipe.idDrink === recipe.idDrink) ?
+                                            <Button
+                                                onClick={onRemove}
+                                                variant="contained"
+                                            >
+                                                Remove
+                                            </Button>
+                                            :
+                                            <Button
+                                                onClick={onSave}
+                                                variant="contained"
+                                            >
+                                                Save
+                                            </Button>
+                                        }
                                     </Grid>
                                 </Grid>
                             </>
@@ -114,6 +135,6 @@ function RecipeCard({ recipe }) {
             </Modal>
         </>
     )
-}
+};
 
 export default RecipeCard;

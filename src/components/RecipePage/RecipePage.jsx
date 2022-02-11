@@ -18,6 +18,7 @@ function RecipePage() {
 
   return (
     <div className="container">
+      <button onClick={() => console.log('savedRecipes:', savedRecipes)}>Log saved</button>
       <Grid container>
         { Array.isArray(savedRecipes) ?
           savedRecipes.map( recipe => (

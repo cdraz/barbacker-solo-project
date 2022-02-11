@@ -53,7 +53,7 @@ router.get('/search/:q', rejectUnauthenticated, (req, res) => {
       i: req.params.q
     }
   })
-    .then(apiRes => res.send(apiRes.data))
+    .then( apiRes => res.send(apiRes.data))
     .catch(err => console.error(`Error in GET /search/${req.params.q}`, err));
 });
 
@@ -66,7 +66,7 @@ router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
       i: req.params.id
     }
   })
-    .then(apiRes => {
+    .then( apiRes => {
       res.send(apiRes.data);
     })
     .catch(err => {
@@ -80,18 +80,18 @@ router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
  */
 router.post('/', rejectUnauthenticated, (req, res) => {
   // POST route code here
-  console.log('in POST /recipes, req.body is', req.body, 'req.user is', req.user);
+  console.log('in POST /api/recipes, req.body is', req.body, 'req.user is', req.user);
   // Write SQL query to save recipe to Postgres
   const queryText = `
     INSERT INTO saved_api_recipes ("apiId", "userId")
     VALUES ($1, $2);
   `;
   const queryParams = [
-    req.body.id,
-    req.user.id
+    req.body.id, // $1
+    req.user.id // $2
   ];
   pool.query(queryText, queryParams)
-    .then(dbRes => {
+    .then( dbRes => {
       console.log('POST success in /api/recipes');
       res.sendStatus(200);
     })
@@ -102,3 +102,25 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 });
 
 module.exports = router;
+
+router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
+  console.log(`in DELETE /api/recipes/${req.params.apiId}`, req.user);
+  // Write SQL query to remove recipe from Postgres for current user
+  const queryText = `
+    DELETE FROM "saved_api_recipes"
+    WHERE "apiId" = $1 AND "userId" = $2;
+  `;
+  const queryParams = [
+    req.params.apiId, // $1
+    req.user.id // $2
+  ];
+  pool.query(queryText, queryParams)
+  .then( dbRes => {
+    console.log(`DELETE success in /api/recipes/${req.params.apiId}`);
+    res.sendStatus(200);
+  })
+  .catch( err => {
+    console.error(`Error in DELETE /api/recipes/${req.params.apiId}`);
+    res.sendStatus(500);
+  })
+})
