@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 // MUI imports
 import Autocomplete from '@mui/material/Autocomplete';
@@ -13,9 +14,18 @@ import { CardActionArea } from '@mui/material';
 
 function AddRecipeButton() {
 
+    // Store access for api ingredients
+    const ingredients = useSelector(store => store.cocktaildb.ingredientsReducer);
+
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
+
+    // Form input state variables
+    const [drinkNameInput, setDrinkNameInput] = useState('');
+    const [ingredientInput, setIngredientInput] = useState([]);
+    const [instructionsInput, setInstructionsInput] = useState('');
+    const [imageInput, setImageInput] = useState();
 
     // Modal style setup
     const style = {
@@ -33,6 +43,9 @@ function AddRecipeButton() {
     const onAddRecipe = event => {
         event.preventDefault();
         console.log('in onAddRecipe');
+
+        // *TODO* Create new FormData to POST to server
+
     }
 
 
@@ -50,11 +63,27 @@ function AddRecipeButton() {
                 sx={{ overflow: 'scroll' }}
             >
                 <Box sx={style}>
+                    <Button onClick={ () => console.log(drinkNameInput, ingredientInput, instructionsInput, imageInput)}>Log inputs</Button>
                     <form onSubmit={onAddRecipe}>
                         <TextField
                             required
                             label="Drink Name"
                             variant="standard"
+                            onChange={event => setDrinkNameInput(event.target.value)}
+                        />
+                        <Autocomplete
+                            multiple
+                            options={ingredients}
+                            getOptionLabel={(option) => option}
+                            filterSelectedOptions
+                            onChange={(event, value) => setIngredientInput(value)}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="filterSelectedOptions"
+                                    placeholder="Ingredients"
+                                />
+                            )}
                         />
                         <TextField
                             required
@@ -62,6 +91,7 @@ function AddRecipeButton() {
                             variant="standard"
                             multiline
                             rows={3}
+                            onChange={event => setInstructionsInput(event.target.value)}
                         />
                         <Button
                             variant="outlined"
@@ -71,6 +101,7 @@ function AddRecipeButton() {
                             <input
                                 type="file"
                                 accept=".jpg"
+                                onChange={event => setImageInput(event.target.files[0])}
                                 hidden
                             />
                         </Button>

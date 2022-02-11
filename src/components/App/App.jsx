@@ -29,6 +29,12 @@ function App() {
 
   const user = useSelector(store => store.user);
 
+  // On App load, get ingredients from cocktaildb api and store in redux
+  // These ingredients are used in our bar page and our recipes page
+  useEffect(() => {
+    dispatch({ type: 'GET_INGREDIENTS' });
+  }, []);
+
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
   }, [dispatch]);
@@ -122,8 +128,8 @@ function App() {
           <ProtectedRoute
             exact
             path="/bar">
-              
-              <BarPage />
+
+            <BarPage />
 
           </ProtectedRoute>
           {/* If none of the other routes matched, we will show a 404. */}

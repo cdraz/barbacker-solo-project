@@ -23,7 +23,7 @@ function RecipePage() {
       <Grid container>
         { Array.isArray(savedRecipes) ?
           savedRecipes.map( recipe => (
-          <RecipeCard recipe={recipe} />
+          <RecipeCard key={recipe.idDrink} recipe={recipe} />
         ))
             : <p>Loading recipes...</p>
         }
