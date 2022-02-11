@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import RecipeCard from '../RecipeCard/RecipeCard';
+import AddRecipeButton from '../AddRecipeButton/AddRecipeButton';
 
 // Material UI imports
 import Grid from '@mui/material/Grid';
@@ -18,7 +19,7 @@ function RecipePage() {
 
   return (
     <div className="container">
-      <button onClick={() => console.log('savedRecipes:', savedRecipes)}>Log saved</button>
+      <AddRecipeButton />
       <Grid container>
         { Array.isArray(savedRecipes) ?
           savedRecipes.map( recipe => (
