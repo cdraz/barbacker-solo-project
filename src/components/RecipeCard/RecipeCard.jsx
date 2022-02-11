@@ -90,7 +90,7 @@ function RecipeCard({ recipe }) {
                                                 {details.ingredients.map( ingredient => (
                                                     ingredient.i ?
                                                     <li>
-                                                        {ingredient.m} {ingredient.i}
+                                                        {ingredient.m}  {ingredient.i}
                                                     </li>
                                                     : null
                                                 ))}

@@ -52,13 +52,13 @@ function SearchPage() {
           />
         </form>
       </div>
-      <div>
+      <Grid container>
         { Array.isArray(searchResults) ? 
           searchResults.map( recipe => (
             <RecipeCard key={recipe.id} recipe={recipe} />
           )) 
         : <p>No results to display.</p>}
-      </div>
+      </Grid>
     </div>
   );
 }
