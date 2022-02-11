@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import SearchResult from './SearchResult/SearchResult';
+import RecipeCard from '../RecipeCard/RecipeCard';
 
 // Material UI imports
 import Grid from '@mui/material/Grid';
@@ -52,13 +52,13 @@ function SearchPage() {
           />
         </form>
       </div>
-      <div>
+      <Grid container>
         { Array.isArray(searchResults) ? 
           searchResults.map( recipe => (
-            <SearchResult key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={recipe} />
           )) 
         : <p>No results to display.</p>}
-      </div>
+      </Grid>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import './SearchResult.css';
+import './RecipeCard.css';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +13,7 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-function SearchResult({ recipe }) {
+function RecipeCard({ recipe }) {
 
     // Dispatch hook
     const dispatch = useDispatch();
@@ -90,7 +90,7 @@ function SearchResult({ recipe }) {
                                                 {details.ingredients.map( ingredient => (
                                                     ingredient.i ?
                                                     <li>
-                                                        {ingredient.m} {ingredient.i}
+                                                        {ingredient.m}  {ingredient.i}
                                                     </li>
                                                     : null
                                                 ))}
@@ -116,4 +116,4 @@ function SearchResult({ recipe }) {
     )
 }
 
-export default SearchResult;
+export default RecipeCard;

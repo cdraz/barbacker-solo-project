@@ -1,14 +1,31 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch} from 'react-redux';
+import RecipeCard from '../RecipeCard/RecipeCard';
 
-// This is one of our simplest components
-// It doesn't have local state
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is
+// Material UI imports
+import Grid from '@mui/material/Grid';
 
 function RecipePage() {
+
+  // Dispatch hook
+  const dispatch = useDispatch();
+  const savedRecipes = useSelector(store => store.recipes.savedReducer);
+
+  useEffect(() => {
+    dispatch({ type: 'GET_SAVED_RECIPES' });
+  }, []);
+  
+
   return (
     <div className="container">
-      <p>Recipe Page</p>
+      <Grid container>
+        { Array.isArray(savedRecipes) ?
+          savedRecipes.map( recipe => (
+          <RecipeCard recipe={recipe} />
+        ))
+            : <p>Loading recipes...</p>
+        }
+      </Grid>
     </div>
   );
 }
