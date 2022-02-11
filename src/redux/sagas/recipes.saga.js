@@ -4,10 +4,13 @@ import axios from 'axios';
 function* getSavedRecipes() {
     try {
         console.log('in getSavedRecipes');
-        let response = yield axios.get('/api/recipes');
+        // Get saved recipes from server
+        const response = yield axios.get('/api/recipes');
+        // Map server response and only use data we need for dispatch to reducer
+        const recipes = response.data.map( recipe => recipe.drinks[0]);
         yield put({
             type: 'SET_SAVED_RECIPES',
-            payload: response.data
+            payload: recipes
         });
     }
     catch(err) {

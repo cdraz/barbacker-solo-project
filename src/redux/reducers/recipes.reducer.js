@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-const savedRecipes = ( state = [], action) => {
+const savedReducer = ( state = [], action) => {
     switch (action.type) {
         case 'SET_SAVED_RECIPES':
             return action.payload;
@@ -11,5 +11,5 @@ const savedRecipes = ( state = [], action) => {
 
 // Combine reducers and export
 export default combineReducers({
-    savedRecipes
+    savedReducer
 });
