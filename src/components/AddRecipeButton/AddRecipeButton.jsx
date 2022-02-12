@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // MUI imports
 import Autocomplete from '@mui/material/Autocomplete';
@@ -14,8 +14,9 @@ import { CardActionArea } from '@mui/material';
 
 function AddRecipeButton() {
 
-    // Store access for api ingredients
+    // Store access for api ingredients, dispatch hook
     const ingredients = useSelector(store => store.cocktaildb.ingredientsReducer);
+    const dispatch = useDispatch();
 
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
@@ -45,7 +46,17 @@ function AddRecipeButton() {
         console.log('in onAddRecipe');
 
         // *TODO* Create new FormData to POST to server
+        const newRecipe = new FormData();
+        newRecipe.append('name', drinkNameInput);
+        newRecipe.append('ingredients', ingredientInput);
+        newRecipe.append('instructions', instructionsInput);
+        newRecipe.append('image', imageInput);
 
+        // Send FormData to saga to post to server
+        dispatch({
+            type: 'POST_USER_RECIPE',
+            payload: newRecipe
+        });
     }
 
 
@@ -63,7 +74,7 @@ function AddRecipeButton() {
                 sx={{ overflow: 'scroll' }}
             >
                 <Box sx={style}>
-                    <Button onClick={ () => console.log(drinkNameInput, ingredientInput, instructionsInput, imageInput)}>Log inputs</Button>
+                    <Button onClick={() => console.log(drinkNameInput, ingredientInput, instructionsInput, imageInput)}>Log inputs</Button>
                     <form onSubmit={onAddRecipe}>
                         <TextField
                             required

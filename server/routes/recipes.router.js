@@ -6,10 +6,6 @@ const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
 
-/**
- * GET route template
- */
-
 router.get('/', rejectUnauthenticated, (req, res) => {
   // GET current user's saved recipes from Postgres
   // Write our SQL query
@@ -45,7 +41,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/search/:q', rejectUnauthenticated, (req, res) => {
-  // GET route code here
   axios({
     method: 'GET',
     url: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/filter.php?i=`,
@@ -58,7 +53,6 @@ router.get('/search/:q', rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
-  // GET route code here
   axios({
     method: 'GET',
     url: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/lookup.php?i=`,
@@ -75,11 +69,7 @@ router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
-/**
- * POST route template
- */
 router.post('/', rejectUnauthenticated, (req, res) => {
-  // POST route code here
   console.log('in POST /api/recipes, req.body is', req.body, 'req.user is', req.user);
   // Write SQL query to save recipe to Postgres
   const queryText = `
@@ -101,8 +91,11 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-module.exports = router;
-
+router.post('/custom', rejectUnauthenticated, (req, res) => {
+  console.log('in POST /api/recipes/custon, req.body is', req.body, 'req.user is', req.user);
+  // Write SQL query to save recipe to database, then save recipe ingredients
+  // const queryText = ``
+})
 router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
   console.log(`in DELETE /api/recipes/${req.params.apiId}`, req.user);
   // Write SQL query to remove recipe from Postgres for current user
@@ -123,4 +116,7 @@ router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
     console.error(`Error in DELETE /api/recipes/${req.params.apiId}`);
     res.sendStatus(500);
   })
-})
+});
+
+module.exports = router;
+
