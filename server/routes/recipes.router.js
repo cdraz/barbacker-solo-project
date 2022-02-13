@@ -105,7 +105,7 @@ router.get('/custom', rejectUnauthenticated, (req, res) => {
     "user_recipes"."name",
     "user_recipes"."instructions",
     "user_recipes"."image",
-    ARRAY_AGG("user_recipes_ingredients"."apiIngredientName")
+    ARRAY_AGG("user_recipes_ingredients"."apiIngredientName") AS "ingredients"
     FROM "user_recipes"
     JOIN "user_recipes_ingredients"
     ON "user_recipes"."id" = "user_recipes_ingredients"."recipeId"

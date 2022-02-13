@@ -16,9 +16,6 @@ function UserRecipeCard({ recipe }) {
 
     // Dispatch hook and store access
     const dispatch = useDispatch();
-    const details = useSelector(store => store.cocktaildb.detailsReducer);
-    const savedRecipes = useSelector(store => store.recipes.savedReducer);
-
 
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
@@ -38,44 +35,39 @@ function UserRecipeCard({ recipe }) {
     };
 
     // Declare onSave
-    const onSave = () => {
-        console.log('in onSave', details.fullDetails.strDrink, details.fullDetails.idDrink);
-        dispatch({
-            type: 'SAVE_RECIPE',
-            payload: details.fullDetails.idDrink
-        });
-    };
+    // const onSave = () => {
+    //     console.log('in onSave', details.fullDetails.strDrink, details.fullDetails.idDrink);
+    //     dispatch({
+    //         type: 'SAVE_RECIPE',
+    //         payload: details.fullDetails.idDrink
+    //     });
+    // };
 
     // Declare onRemove
     const onRemove = () => {
-        console.log('in onRemove', details.fullDetails.strDrink, details.fullDetails.idDrink);
-        dispatch({
-            type: 'REMOVE_RECIPE',
-            payload: details.fullDetails.idDrink
-        });
+        // console.log('in onRemove', details.fullDetails.strDrink, details.fullDetails.idDrink);
+        // dispatch({
+        //     type: 'REMOVE_RECIPE',
+        //     payload: details.fullDetails.idDrink
+        // });
     };
 
     return (
         <>
-            <Card key={recipe.idDrink} sx={{ maxWidth: 345 }}>
+            <Card key={recipe.id} sx={{ maxWidth: 345 }}>
                 <CardActionArea onClick={() => {
                     setOpen(true);
-                    dispatch({
-                        type: 'GET_SELECTED_RECIPE_DETAIL',
-                        payload: recipe.idDrink
-                    });
-                    console.log(details);
                 }}>
                     <CardMedia
                         className="recipeImage"
                         component="img"
                         height="140"
-                        image={recipe.strDrinkThumb}
-                        alt={recipe.strDrink}
+                        image={recipe.image}
+                        alt={recipe.name}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                            {recipe.strDrink}
+                            {recipe.name}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
@@ -85,50 +77,38 @@ function UserRecipeCard({ recipe }) {
                 onClose={handleClose}
                 sx={{ overflow: 'scroll' }}
             >
-                <Box key={recipe.idDrink} sx={style}>
+                <Box key={recipe.id} sx={style}>
                     {
-                        details ?
+                        recipe ?
                             <>
-                                <img src={recipe.strDrinkThumb}></img>
+                                <img src={recipe.image}></img>
                                 <Typography variant="h6" component="h2">
-                                    {details.fullDetails.strDrink}
+                                    {recipe.name}
                                 </Typography>
                                 <Grid container spacing={1} columns={3}>
                                     <Grid item>
                                         <Typography component="p">
                                             <ul>
-                                                {details.ingredients.map(ingredient => (
-                                                    ingredient.i ?
-                                                        <li>
-                                                            {ingredient.m}  {ingredient.i}
+                                                {recipe.ingredients.map(ingredient => (
+                                                        <li key={ingredient}>
+                                                            {ingredient}
                                                         </li>
-                                                        : null
                                                 ))}
                                             </ul>
                                         </Typography>
                                         <Typography component="p">
-                                            {details.fullDetails.strInstructions}
+                                            {recipe.instructions}
                                         </Typography>
-                                        {/* Check if the selected recipe is a saved recipe, if it is then render the remove button, if not render the save button */}
-                                        {savedRecipes.some(savedRecipe => savedRecipe.idDrink === recipe.idDrink) ?
-                                            <Button
-                                                onClick={onRemove}
-                                                variant="contained"
-                                            >
-                                                Remove
-                                            </Button>
-                                            :
-                                            <Button
-                                                onClick={onSave}
-                                                variant="contained"
-                                            >
-                                                Save
-                                            </Button>
-                                        }
+                                        <Button
+                                            onClick={onRemove}
+                                            variant="contained"
+                                        >
+                                            Remove
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </>
-                            : <p>Loading recipe...</p>
+                            : <Typography component="p">Loading recipe...</Typography>
                     }
                 </Box>
             </Modal>

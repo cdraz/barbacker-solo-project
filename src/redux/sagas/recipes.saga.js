@@ -23,7 +23,7 @@ function* getUserRecipes() {
         console.log('in getUserRecipes');
         // Get custom user recipes from server
         const response = yield axios.get('api/recipes/custom');
-        yield dispatch({
+        yield put({
             type: 'SET_USER_RECIPES',
             payload: response.data
         });
@@ -36,7 +36,10 @@ function* getUserRecipes() {
 function* postUserRecipe(action) {
     try {
         console.log('in postUserRecipe');
-        yield axios.post('/api/recipes/custom', action.payload)
+        yield axios.post('/api/recipes/custom', action.payload);
+        yield put({
+            type: 'GET_USER_RECIPES'
+        });
     }
     catch(err) {
         console.error('Error in postUserRecipe', err);
