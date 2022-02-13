@@ -6,7 +6,6 @@ function* getSavedRecipes() {
         console.log('in getSavedRecipes');
         // Get saved recipes from server
         const response = yield axios.get('/api/recipes');
-        console.log('response is', response);
         // Map server response and only use data we need for dispatch to reducer
         const recipes = response.data.map( recipe => recipe.drinks[0]);
         yield put({
@@ -19,10 +18,28 @@ function* getSavedRecipes() {
     }
 }
 
+function* getUserRecipes() {
+    try {
+        console.log('in getUserRecipes');
+        // Get custom user recipes from server
+        const response = yield axios.get('api/recipes/custom');
+        yield put({
+            type: 'SET_USER_RECIPES',
+            payload: response.data
+        });
+    }
+    catch(err) {
+        console.error('Error in getUserRecipes', err);
+    }
+}
+
 function* postUserRecipe(action) {
     try {
         console.log('in postUserRecipe');
-        yield axios.post('/api/recipes/custom', action.payload)
+        yield axios.post('/api/recipes/custom', action.payload);
+        yield put({
+            type: 'GET_USER_RECIPES'
+        });
     }
     catch(err) {
         console.error('Error in postUserRecipe', err);
@@ -55,6 +72,7 @@ function* removeRecipe(action) {
 
 function* recipesSaga() {
     yield takeLatest('GET_SAVED_RECIPES', getSavedRecipes);
+    yield takeLatest('GET_USER_RECIPES', getUserRecipes);
     yield takeLatest('POST_USER_RECIPE', postUserRecipe);
     yield takeLatest('REMOVE_RECIPE', removeRecipe);
     yield takeLatest('SAVE_RECIPE', saveRecipe);

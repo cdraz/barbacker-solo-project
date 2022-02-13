@@ -129,7 +129,7 @@ function RecipeCard({ recipe }) {
                                     </Grid>
                                 </Grid>
                             </>
-                            : <p>Loading recipe...</p>
+                            : <Typography component="p">Loading recipe...</Typography>
                     }
                 </Box>
             </Modal>
