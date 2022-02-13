@@ -2,13 +2,13 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 const axios = require('axios');
+const multer = require('multer');
+const streamifier = require('streamifier');
+const fs = require('fs');
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
-
-/**
- * GET route template
- */
+const upload = multer();
 
 router.get('/', rejectUnauthenticated, (req, res) => {
   // GET current user's saved recipes from Postgres
@@ -45,7 +45,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/search/:q', rejectUnauthenticated, (req, res) => {
-  // GET route code here
   axios({
     method: 'GET',
     url: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/filter.php?i=`,
@@ -53,12 +52,11 @@ router.get('/search/:q', rejectUnauthenticated, (req, res) => {
       i: req.params.q
     }
   })
-    .then( apiRes => res.send(apiRes.data))
+    .then(apiRes => res.send(apiRes.data))
     .catch(err => console.error(`Error in GET /search/${req.params.q}`, err));
 });
 
 router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
-  // GET route code here
   axios({
     method: 'GET',
     url: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/lookup.php?i=`,
@@ -66,7 +64,7 @@ router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
       i: req.params.id
     }
   })
-    .then( apiRes => {
+    .then(apiRes => {
       res.send(apiRes.data);
     })
     .catch(err => {
@@ -75,11 +73,7 @@ router.get('/detail/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
-/**
- * POST route template
- */
 router.post('/', rejectUnauthenticated, (req, res) => {
-  // POST route code here
   console.log('in POST /api/recipes, req.body is', req.body, 'req.user is', req.user);
   // Write SQL query to save recipe to Postgres
   const queryText = `
@@ -91,7 +85,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     req.user.id // $2
   ];
   pool.query(queryText, queryParams)
-    .then( dbRes => {
+    .then(dbRes => {
       console.log('POST success in /api/recipes');
       res.sendStatus(200);
     })
@@ -101,7 +95,72 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-module.exports = router;
+router.post('/custom', rejectUnauthenticated, upload.single('image'), (req, res) => {
+  console.log('in POST /api/recipes/custon, req.body is', req.body, 'req.file is', req.file, 'req.user is', req.user);
+  // Write SQL query to save recipe to database, then save recipe ingredients
+  // First: Upload image with multer and save filepath
+  // Check file type before we upload
+  if (req.file.mimetype != 'image/jpeg') {
+    res.sendStatus(400);
+    return;
+  }
+
+  // Set unique file name
+  const imageName = Date.now() + '.jpg'
+
+  // Set writePath and filePath (writePath for upload, filePath for database)
+  const writePath = `${__dirname}/../../public/uploads/${imageName}`;
+  const filePath = `/uploads/${imageName}`
+
+  // Create writeStream that will take req.file.buffer and write the file to our public folder
+  const writeStream = fs.createWriteStream(writePath);
+  // Use streamifier to turn req.file.buffer from multer into a readStream and pipe it to our writeStream to write file
+  streamifier.createReadStream(req.file.buffer).pipe(writeStream);
+
+  // Save drink name, instructions, image filepath to database
+  // Get ingredients as array
+  const ingredients = req.body.ingredients.split(',')
+
+  // Build the SQL query
+  let queryText = `
+    WITH recipe AS (
+    INSERT INTO "user_recipes" ("userId", "name", "instructions", "image")
+    VALUES ($1, $2, $3, $4)
+    RETURNING id
+    )
+    INSERT INTO "user_recipes_ingredients" ("recipeId", "apiIngredientName")
+    VALUES `
+
+  const queryParams = [
+    req.user.id, // $1
+    req.body.name, // $2
+    req.body.instructions, // $3
+    filePath // $4
+  ];
+
+  for (let i = 0; i < ingredients.length; i++) {
+    queryText += `((SELECT * FROM recipe), $${i + 5})`;
+    queryParams.push(ingredients[i]);
+    // If its the last ingredient being entered, add semicolon to end SQL query,
+    // Otherwise add ', ' before concatenating next values
+    if (i === ingredients.length - 1) {
+      queryText += ';';
+    } else {
+      queryText += ', ';
+    }
+  }
+  pool.query(queryText, queryParams)
+  .then( dbRes => {
+    console.log('POST /api/recipes/custom success');
+    res.sendStatus(200);
+  })
+  .catch( err => {
+    console.error('Error in POST /api/recipes/custom', err);
+    res.sendStatus(500);
+  })
+});
+
+
 
 router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
   console.log(`in DELETE /api/recipes/${req.params.apiId}`, req.user);
@@ -115,12 +174,15 @@ router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
     req.user.id // $2
   ];
   pool.query(queryText, queryParams)
-  .then( dbRes => {
-    console.log(`DELETE success in /api/recipes/${req.params.apiId}`);
-    res.sendStatus(200);
-  })
-  .catch( err => {
-    console.error(`Error in DELETE /api/recipes/${req.params.apiId}`);
-    res.sendStatus(500);
-  })
-})
+    .then(dbRes => {
+      console.log(`DELETE success in /api/recipes/${req.params.apiId}`);
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.error(`Error in DELETE /api/recipes/${req.params.apiId}`, err);
+      res.sendStatus(500);
+    })
+});
+
+module.exports = router;
+
