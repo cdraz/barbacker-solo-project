@@ -57,6 +57,9 @@ function AddRecipeButton() {
             type: 'POST_USER_RECIPE',
             payload: newRecipe
         });
+
+        // Close add recipe view
+        setOpen(false);
     }
 
 

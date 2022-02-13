@@ -232,7 +232,31 @@ router.put('/custom/:id/edit', rejectUnauthenticated, (req, res) => {
       console.error(`Error in PUT /api/recipes/custom/${req.params.id}/edit`, err);
       res.sendStatus(500);
     });
-  
+});
+
+router.delete('/custom/:id/delete', rejectUnauthenticated, (req, res) => {
+  console.log(`in /api/custom/${req.params.id}/delete`);
+  // Write SQL query to delete requested recipe
+  const queryText = `
+  WITH deleteIngredients AS (
+    DELETE FROM "user_recipes_ingredients"
+    WHERE "recipeId" = $1 )
+  DELETE FROM "user_recipes"
+  WHERE "id" = $1 AND "userId" = $2;
+  `;
+  const queryParams = [
+    req.params.id, // $1
+    req.user.id // $2
+  ];
+  pool.query(queryText, queryParams)
+  .then( dbRes => {
+    console.log(`DELETE /api/recipes/custom/${req.params.id}/delete success`);
+    res.sendStatus(200)
+  })
+  .catch( err => {
+    console.error(`Error in DELETE /api/recipes/custom/${req.params.id}/delete`, err);
+    res.sendStatus(500);    
+  })
 });
 
 router.delete('/:apiId', rejectUnauthenticated, (req, res) => {

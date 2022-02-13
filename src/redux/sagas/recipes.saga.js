@@ -46,6 +46,18 @@ function* postUserRecipe(action) {
     }
 }
 
+function* deleteUserRecipe(action) {
+    try {
+        console.log('in deleteUserRecipe');
+        yield axios.delete(`/api/recipes/custom/${action.payload}/delete`);
+        yield put({
+            type: 'GET_USER_RECIPES'
+        });
+    }
+    catch(err) {
+        console.error('Error in deleteUserRecipe', err);
+    }
+}
 function* updateUserRecipe(action) {
     try {
         console.log('in updateUserRecipe');
@@ -86,6 +98,7 @@ function* removeRecipe(action) {
 function* recipesSaga() {
     yield takeLatest('GET_SAVED_RECIPES', getSavedRecipes);
     yield takeLatest('GET_USER_RECIPES', getUserRecipes);
+    yield takeLatest('DELETE_USER_RECIPE', deleteUserRecipe);
     yield takeLatest('POST_USER_RECIPE', postUserRecipe);
     yield takeLatest('UPDATE_USER_RECIPE', updateUserRecipe);
     yield takeLatest('REMOVE_RECIPE', removeRecipe);
