@@ -74,7 +74,7 @@ function AddRecipeButton() {
                 sx={{ overflow: 'scroll' }}
             >
                 <Box sx={style}>
-                    <Button onClick={() => console.log(drinkNameInput, ingredientInput, instructionsInput, imageInput)}>Log inputs</Button>
+                    <Typography component={"h5"}> Add a Recipe</Typography>
                     <form onSubmit={onAddRecipe}>
                         <TextField
                             required

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 // MUI imports
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -9,6 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
@@ -16,10 +19,28 @@ function UserRecipeCard({ recipe }) {
 
     // Dispatch hook and store access
     const dispatch = useDispatch();
+    const ingredients = useSelector(store => store.cocktaildb.ingredientsReducer);
 
-    //  MUI modal setup for detail view
-    const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false);
+    //  MUI modal setup
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const handleDetailsClose = () => setDetailsOpen(false);
+    const [editOpen, setEditOpen] = useState(false);
+    const handleEditClose = () => window.alert('Please save changes or click cancel');
+
+    // Form input state variables
+    const [drinkNameInput, setDrinkNameInput] = useState('');
+    const [ingredientInput, setIngredientInput] = useState([]);
+    const [instructionsInput, setInstructionsInput] = useState('');
+
+    // Declare onDelete
+    const onDelete = () => {
+        console.log('in onDelete');
+    }
+
+    // Decelare onSaveChanges
+    const onSaveChanges = () => {
+        console.log('in onSaveChanges');
+    }
 
     // Modal style setup
     const style = {
@@ -34,29 +55,11 @@ function UserRecipeCard({ recipe }) {
         p: 4,
     };
 
-    // Declare onSave
-    // const onSave = () => {
-    //     console.log('in onSave', details.fullDetails.strDrink, details.fullDetails.idDrink);
-    //     dispatch({
-    //         type: 'SAVE_RECIPE',
-    //         payload: details.fullDetails.idDrink
-    //     });
-    // };
-
-    // Declare onRemove
-    const onRemove = () => {
-        // console.log('in onRemove', details.fullDetails.strDrink, details.fullDetails.idDrink);
-        // dispatch({
-        //     type: 'REMOVE_RECIPE',
-        //     payload: details.fullDetails.idDrink
-        // });
-    };
-
     return (
         <>
             <Card key={recipe.id} sx={{ maxWidth: 345 }}>
                 <CardActionArea onClick={() => {
-                    setOpen(true);
+                    setDetailsOpen(true);
                 }}>
                     <CardMedia
                         className="recipeImage"
@@ -73,8 +76,8 @@ function UserRecipeCard({ recipe }) {
                 </CardActionArea>
             </Card>
             <Modal
-                open={open}
-                onClose={handleClose}
+                open={detailsOpen}
+                onClose={handleDetailsClose}
                 sx={{ overflow: 'scroll' }}
             >
                 <Box key={recipe.id} sx={style}>
@@ -87,29 +90,95 @@ function UserRecipeCard({ recipe }) {
                                 </Typography>
                                 <Grid container spacing={1} columns={3}>
                                     <Grid item>
-                                        <Typography component="p">
-                                            <ul>
-                                                {recipe.ingredients.map(ingredient => (
-                                                        <li key={ingredient}>
-                                                            {ingredient}
-                                                        </li>
-                                                ))}
-                                            </ul>
-                                        </Typography>
+                                        <ul>
+                                            {recipe.ingredients.map(ingredient => (
+                                                <li key={ingredient}>
+                                                    {ingredient}
+                                                </li>
+                                            ))}
+                                        </ul>
                                         <Typography component="p">
                                             {recipe.instructions}
                                         </Typography>
                                         <Button
-                                            onClick={onRemove}
                                             variant="contained"
+                                            onClick={() => {
+                                                setDetailsOpen(false);
+                                                setEditOpen(true);
+                                            }}
                                         >
-                                            Remove
+                                            Edit
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </>
                             : <Typography component="p">Loading recipe...</Typography>
                     }
+                </Box>
+            </Modal>
+            <Modal
+                open={editOpen}
+                onClose={handleEditClose}
+                sx={{ overflow: 'scroll' }}
+            >
+                <Box sx={style}>
+                    <img src={recipe.image} />
+                    <form onSubmit={onSaveChanges}>
+                        <TextField
+                            required
+                            label="Drink Name"
+                            variant="standard"
+                            defaultValue={recipe.name}
+                            onChange={event => setDrinkNameInput(event.target.value)}
+                        />
+                        <Autocomplete
+                            multiple
+                            options={ingredients}
+                            getOptionLabel={(option) => option}
+                            filterSelectedOptions
+                            defaultValue={recipe.ingredients}
+                            onChange={(event, value) => setIngredientInput(value)}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="filterSelectedOptions"
+                                    placeholder="Ingredients"
+                                />
+                            )}
+                        />
+                        <TextField
+                            required
+                            label="Instructions"
+                            variant="standard"
+                            defaultValue={recipe.instructions}
+                            multiline
+                            rows={3}
+                            onChange={event => setInstructionsInput(event.target.value)}
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                        >
+                            Save Changes
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="text"
+                            onClick={() => {
+                                setEditOpen(false);
+                                setDetailsOpen(true);
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="text"
+                            onClick={onDelete}
+                        >
+                            Delete
+                        </Button>
+                    </form>
                 </Box>
             </Modal>
         </>
