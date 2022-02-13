@@ -27,12 +27,10 @@ CREATE TABLE "user_recipes" (
     "name" VARCHAR(255) NOT NULL,
     "instructions" VARCHAR(2400) NOT NULL,
     "image" VARCHAR(1200) NOT NULL,
-    "alcoholic" BOOLEAN NOT NULL
 );
 
 CREATE TABLE "user_recipes_ingredients" (
     "id" SERIAL PRIMARY KEY,
     "recipeId" INTEGER NOT NULL REFERENCES "user_recipes",
     "apiIngredientName" VARCHAR(255) NOT NULL,
-    "apiIngredientId" INTEGER NOT NULL
 );
