@@ -29,7 +29,7 @@ function RecipePage() {
           savedRecipes.map( recipe => (
           <RecipeCard key={recipe.idDrink} recipe={recipe} />
         ))
-            : <p>Loading recipes...</p>
+            : <Typography component="p">Loading recipes...</Typography>
         }
       </Grid>
       <h5>My Recipes</h5>
@@ -38,7 +38,7 @@ function RecipePage() {
           userRecipes.map( recipe => (
             <UserRecipeCard key={recipe.id} recipe={recipe} />
           ))
-            : <p>Loading recipes...</p>
+            : <Typography component="p">Loading recipes...</Typography>
         }
       </Grid>
     </div>

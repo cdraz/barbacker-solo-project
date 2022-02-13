@@ -191,7 +191,49 @@ router.post('/custom', rejectUnauthenticated, upload.single('image'), (req, res)
     })
 });
 
+router.put('/custom/:id/edit', rejectUnauthenticated, (req, res) => {
+  console.log(`in /api/custom/${req.params.id}/edit`, req.user, req.body);
+  // Write SQL query to update recipe
+  let queryText = `
+    WITH clearPreviousIngredients AS (
+    DELETE FROM "user_recipes_ingredients"
+    WHERE "recipeId" = $1 ),
+    updateRecipe AS (
+    UPDATE "user_recipes"
+    SET "name" = $2, "instructions" = $3
+    WHERE "id" = $1 )
+    INSERT INTO "user_recipes_ingredients" ("recipeId", "apiIngredientName")
+    VALUES `;
 
+  const queryParams = [
+    req.params.id, // $1
+    req.body.name, // $2
+    req.body.instructions, //$3
+  ];
+
+  for (let i = 0; i < req.body.ingredients.length; i++) {
+    queryText += `($1, $${i+4})`;
+    queryParams.push(req.body.ingredients[i]);
+    // If its the last ingredient being entered, add semicolon to end SQL query,
+    // Otherwise add ', ' before concatenating next values
+    if (i === req.body.ingredients.length - 1) {
+      queryText += ';';
+    } else {
+      queryText += ', ';
+    }
+  }
+
+  pool.query(queryText, queryParams)
+    .then(dbRes => {
+      console.log(`PUT /api/recipes/custom/${req.params.id}/edit success`);
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.error(`Error in PUT /api/recipes/custom/${req.params.id}/edit`, err);
+      res.sendStatus(500);
+    });
+  
+});
 
 router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
   console.log(`in DELETE /api/recipes/${req.params.apiId}`, req.user);
