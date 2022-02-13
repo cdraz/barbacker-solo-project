@@ -35,6 +35,11 @@ function UserRecipeCard({ recipe }) {
     // Declare onDelete
     const onDelete = () => {
         console.log('in onDelete');
+        dispatch({
+            type: 'DELETE_USER_RECIPE',
+            payload: recipe.id
+        });
+        setEditOpen(false);
     }
 
     // Decelare onSaveChanges
