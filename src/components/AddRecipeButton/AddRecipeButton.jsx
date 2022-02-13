@@ -91,7 +91,7 @@ function AddRecipeButton() {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="filterSelectedOptions"
+                                    label="Ingredients"
                                     placeholder="Ingredients"
                                 />
                             )}

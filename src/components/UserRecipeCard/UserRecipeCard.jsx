@@ -28,9 +28,9 @@ function UserRecipeCard({ recipe }) {
     const handleEditClose = () => window.alert('Please save changes or click cancel');
 
     // Form input state variables
-    const [drinkNameInput, setDrinkNameInput] = useState('');
-    const [ingredientInput, setIngredientInput] = useState([]);
-    const [instructionsInput, setInstructionsInput] = useState('');
+    const [drinkNameInput, setDrinkNameInput] = useState(recipe.name);
+    const [ingredientInput, setIngredientInput] = useState(recipe.ingredients);
+    const [instructionsInput, setInstructionsInput] = useState(recipe.instructions);
 
     // Declare onDelete
     const onDelete = () => {
@@ -40,6 +40,17 @@ function UserRecipeCard({ recipe }) {
     // Decelare onSaveChanges
     const onSaveChanges = () => {
         console.log('in onSaveChanges');
+        dispatch({
+            type: 'UPDATE_USER_RECIPE',
+            payload: {
+                id: recipe.id,
+                name: drinkNameInput,
+                ingredients: ingredientInput,
+                instructions: instructionsInput
+            }
+        });
+        setEditOpen(false);
+        setDetailsOpen(true);
     }
 
     // Modal style setup
@@ -141,7 +152,7 @@ function UserRecipeCard({ recipe }) {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="filterSelectedOptions"
+                                    label="Ingredients"
                                     placeholder="Ingredients"
                                 />
                             )}

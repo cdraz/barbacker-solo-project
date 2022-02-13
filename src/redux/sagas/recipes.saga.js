@@ -46,6 +46,19 @@ function* postUserRecipe(action) {
     }
 }
 
+function* updateUserRecipe(action) {
+    try {
+        console.log('in updateUserRecipe');
+        yield axios.put(`/api/recipes/custom/${action.payload.id}/edit`, action.payload);
+        yield put({
+            type: 'GET_USER_RECIPES'
+        });
+    }
+    catch(err) {
+        console.error('Error in updateUserRecipe', err);
+    }
+}
+
 function* saveRecipe(action) {
     try {
         console.log('in saveRecipe', action.payload);
@@ -74,6 +87,7 @@ function* recipesSaga() {
     yield takeLatest('GET_SAVED_RECIPES', getSavedRecipes);
     yield takeLatest('GET_USER_RECIPES', getUserRecipes);
     yield takeLatest('POST_USER_RECIPE', postUserRecipe);
+    yield takeLatest('UPDATE_USER_RECIPE', updateUserRecipe);
     yield takeLatest('REMOVE_RECIPE', removeRecipe);
     yield takeLatest('SAVE_RECIPE', saveRecipe);
 }
