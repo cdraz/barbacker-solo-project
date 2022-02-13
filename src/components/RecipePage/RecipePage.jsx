@@ -11,9 +11,11 @@ function RecipePage() {
   // Dispatch hook
   const dispatch = useDispatch();
   const savedRecipes = useSelector(store => store.recipes.savedReducer);
+  const userRecipes = useSelector(store => store.recipes.userRecipesReducer);
 
   useEffect(() => {
     dispatch({ type: 'GET_SAVED_RECIPES' });
+    dispatch({ type: 'GET_USER_RECIPES'});
   }, []);
   
 

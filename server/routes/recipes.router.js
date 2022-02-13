@@ -77,7 +77,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
   console.log('in POST /api/recipes, req.body is', req.body, 'req.user is', req.user);
   // Write SQL query to save recipe to Postgres
   const queryText = `
-    INSERT INTO saved_api_recipes ("apiId", "userId")
+    INSERT INTO "saved_api_recipes" ("apiId", "userId")
     VALUES ($1, $2);
   `;
   const queryParams = [
@@ -95,8 +95,39 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get('/custom', rejectUnauthenticated, (req, res) => {
+  console.log('in GET /api/recipes/custom');
+  // Write SQL query to get custom user recipes for current user
+  const queryText = `
+    SELECT 
+    "user_recipes"."id",
+    "user_recipes"."userId",
+    "user_recipes"."name",
+    "user_recipes"."instructions",
+    "user_recipes"."image",
+    ARRAY_AGG("user_recipes_ingredients"."apiIngredientName")
+    FROM "user_recipes"
+    JOIN "user_recipes_ingredients"
+    ON "user_recipes"."id" = "user_recipes_ingredients"."recipeId"
+    WHERE "user_recipes"."userId" = $1
+    GROUP BY "user_recipes"."id";
+  `;
+  const queryParams = [
+    req.user.id // $1
+  ];
+  pool.query(queryText, queryParams)
+  .then( dbRes => {
+    console.log('GET /api/recipes/custom success');
+    res.send(dbRes.rows);
+  })
+  .catch( err => {
+    console.error('Error in GET /api/recipes/custom', err);
+    res.sendStatus(500);
+  });
+});
+
 router.post('/custom', rejectUnauthenticated, upload.single('image'), (req, res) => {
-  console.log('in POST /api/recipes/custon, req.body is', req.body, 'req.file is', req.file, 'req.user is', req.user);
+  console.log('in POST /api/recipes/custom, req.body is', req.body, 'req.file is', req.file, 'req.user is', req.user);
   // Write SQL query to save recipe to database, then save recipe ingredients
   // First: Upload image with multer and save filepath
   // Check file type before we upload
@@ -150,14 +181,14 @@ router.post('/custom', rejectUnauthenticated, upload.single('image'), (req, res)
     }
   }
   pool.query(queryText, queryParams)
-  .then( dbRes => {
-    console.log('POST /api/recipes/custom success');
-    res.sendStatus(200);
-  })
-  .catch( err => {
-    console.error('Error in POST /api/recipes/custom', err);
-    res.sendStatus(500);
-  })
+    .then(dbRes => {
+      console.log('POST /api/recipes/custom success');
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.error('Error in POST /api/recipes/custom', err);
+      res.sendStatus(500);
+    })
 });
 
 
