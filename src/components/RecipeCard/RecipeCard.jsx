@@ -100,8 +100,8 @@ function RecipeCard({ recipe, bar }) {
                                             <ul>
                                                 {details.ingredients.map(ingredient => (
                                                     ingredient.i ?
-                                                        <li className={bar.some(barIngredient => barIngredient.apiString === ingredient.i) ? 'ownedIngredient' : 'unownedIngredient'}>
-                                                            {ingredient.m}  {ingredient.i}
+                                                        <li className={bar.some(barIngredient => barIngredient.apiString.toLowerCase() === ingredient.i.toLowerCase()) ? 'ownedIngredient' : 'unownedIngredient'}>
+                                                            {ingredient.m + ' ' + ingredient.i}
                                                         </li>
                                                         : null
                                                 ))}
