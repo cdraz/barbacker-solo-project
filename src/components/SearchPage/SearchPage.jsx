@@ -40,7 +40,6 @@ function SearchPage() {
   return (
     <div className="container">
       <div>
-        <button onClick={() => console.log(bar)}>Log bar</button>
         <h3>Search</h3>
         <form onSubmit={handleSubmit}>
           <label htmlFor="searchInput">
