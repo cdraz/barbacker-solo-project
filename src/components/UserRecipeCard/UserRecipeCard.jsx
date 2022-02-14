@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-function UserRecipeCard({ recipe }) {
+function UserRecipeCard({ recipe, bar }) {
 
     // Dispatch hook and store access
     const dispatch = useDispatch();
@@ -108,7 +108,7 @@ function UserRecipeCard({ recipe }) {
                                     <Grid item>
                                         <ul>
                                             {recipe.ingredients.map(ingredient => (
-                                                <li key={ingredient}>
+                                                <li key={ingredient} className={bar.some(barIngredient => barIngredient.apiString.toLowerCase() === ingredient.toLowerCase()) ? 'ownedIngredient' : 'unownedIngredient'}>
                                                     {ingredient}
                                                 </li>
                                             ))}

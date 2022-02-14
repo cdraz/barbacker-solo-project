@@ -37,7 +37,7 @@ function RecipePage() {
       <Grid container>
         { Array.isArray(userRecipes) ?
           userRecipes.map( recipe => (
-            <UserRecipeCard key={recipe.id} recipe={recipe} />
+            <UserRecipeCard key={recipe.id} recipe={recipe} bar={bar}/>
           ))
             : <Typography component="p">Loading recipes...</Typography>
         }
