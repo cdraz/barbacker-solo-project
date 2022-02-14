@@ -22,6 +22,17 @@ const searchResultsReducer = ( state = [], action ) => {
     };
 };
 
+// discoverResultsReducer will hold drink recipe results from cocktaildb api
+// Will be rednered on discover page
+const discoverResultsReducer = ( state = [], action ) => {
+    switch(action.type) {
+        case 'SET_DISCOVER_RESULTS':
+            return action.payload;
+        default:
+            return state;
+    };
+};
+
 // detailsReducer will hold the details of the currently selected cocktail recipe from cocktaildb api
 const detailsReducer = ( state = { fullDetails: {}, ingredients: [] }, action ) => {
     switch(action.type) {
@@ -54,6 +65,7 @@ const detailsReducer = ( state = { fullDetails: {}, ingredients: [] }, action ) 
 // Combine reducers and export
 export default combineReducers({
     detailsReducer,
+    discoverResultsReducer,
     ingredientsReducer,
     searchResultsReducer,
 });

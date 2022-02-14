@@ -5,6 +5,7 @@ import RecipeCard from '../RecipeCard/RecipeCard';
 
 // Material UI imports
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 function SearchPage() {
 
@@ -57,7 +58,7 @@ function SearchPage() {
           searchResults.map( recipe => (
             <RecipeCard key={recipe.id} recipe={recipe} />
           )) 
-        : <p>No results to display.</p>}
+        : <Typography component="p">No results to display.</Typography>}
       </Grid>
     </div>
   );
