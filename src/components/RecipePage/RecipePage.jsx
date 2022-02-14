@@ -13,13 +13,14 @@ function RecipePage() {
   const dispatch = useDispatch();
   const savedRecipes = useSelector(store => store.recipes.savedReducer);
   const userRecipes = useSelector(store => store.recipes.userRecipeReducer);
+  const bar = useSelector(store => store.bar.userIngredientsReducer);
 
   useEffect(() => {
     dispatch({ type: 'GET_SAVED_RECIPES' });
     dispatch({ type: 'GET_USER_RECIPES'});
+    dispatch({ type: 'GET_BAR_INGREDIENTS' });
   }, []);
   
-
   return (
     <div className="container">
       <AddRecipeButton />
@@ -27,7 +28,7 @@ function RecipePage() {
       <Grid container>
         { Array.isArray(savedRecipes) ?
           savedRecipes.map( recipe => (
-          <RecipeCard key={recipe.idDrink} recipe={recipe} />
+          <RecipeCard key={recipe.idDrink} recipe={recipe} bar={bar}/>
         ))
             : <Typography component="p">Loading recipes...</Typography>
         }

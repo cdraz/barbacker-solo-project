@@ -13,13 +13,12 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-function RecipeCard({ recipe }) {
+function RecipeCard({ recipe, bar }) {
 
     // Dispatch hook and store access
     const dispatch = useDispatch();
     const details = useSelector(store => store.cocktaildb.detailsReducer);
     const savedRecipes = useSelector(store => store.recipes.savedReducer);
-
 
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
@@ -55,6 +54,7 @@ function RecipeCard({ recipe }) {
             payload: details.fullDetails.idDrink
         });
     };
+
 
     return (
         <>
@@ -100,7 +100,7 @@ function RecipeCard({ recipe }) {
                                             <ul>
                                                 {details.ingredients.map(ingredient => (
                                                     ingredient.i ?
-                                                        <li>
+                                                        <li className={bar.some(barIngredient => barIngredient.apiString === ingredient.i) ? 'ownedIngredient' : 'unownedIngredient'}>
                                                             {ingredient.m}  {ingredient.i}
                                                         </li>
                                                         : null

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import RecipeCard from '../RecipeCard/RecipeCard';
@@ -11,7 +11,8 @@ function SearchPage() {
 
   // Dispatch hook, store access
   const dispatch = useDispatch();
-  const searchResults = useSelector( store => store.cocktaildb.searchResultsReducer);
+  const searchResults = useSelector(store => store.cocktaildb.searchResultsReducer);
+  const bar = useSelector(store => store.bar.userIngredientsReducer);
 
   // Set state variable for search input
   const [searchInput, setSearchInput] = useState('');
@@ -32,9 +33,14 @@ function SearchPage() {
     });
   }
 
+  useEffect(() => {
+    dispatch({ type: 'GET_BAR_INGREDIENTS' });
+  }, []);
+
   return (
     <div className="container">
       <div>
+        <button onClick={() => console.log(bar)}>Log bar</button>
         <h3>Search</h3>
         <form onSubmit={handleSubmit}>
           <label htmlFor="searchInput">
@@ -54,11 +60,11 @@ function SearchPage() {
         </form>
       </div>
       <Grid container>
-        { Array.isArray(searchResults) ? 
-          searchResults.map( recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          )) 
-        : <Typography component="p">No results to display.</Typography>}
+        {Array.isArray(searchResults) ?
+          searchResults.map(recipe => (
+            <RecipeCard key={recipe.id} recipe={recipe} bar={bar}/>
+          ))
+          : <Typography component="p">No results to display.</Typography>}
       </Grid>
     </div>
   );
