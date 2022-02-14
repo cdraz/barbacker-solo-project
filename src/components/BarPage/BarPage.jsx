@@ -15,28 +15,17 @@ function BarPage() {
     const dispatch = useDispatch();
 
     // Set state variables
-    const [formInput, setFormInput] = useState([]);
+    const [ingredientInput, setIngredientInput] = useState([]);
 
     // Declare handleSubmit
     const handleSubmit = event => {
         event.preventDefault();
-        console.log('in handleSubmit', formInput);
+        console.log('in handleSubmit', ingredientInput);
         // Dispatch our submitted inputs to our Saga to POST to Postgres
         dispatch({
             type: 'POST_BAR_INGREDIENTS',
-            payload: formInput
+            payload: ingredientInput
         });
-    }
-
-    // Declare handleChange
-    const handleChange = event => {
-        console.log('in handleChange');
-        // Turn our selected options into an array
-        let array = [...event.target.selectedOptions]
-        // Map our array to get the values for our form input
-        setFormInput(array.map(option => (
-            option.innerText
-        )));
     }
 
     // Call getIngredients on component load
@@ -58,13 +47,20 @@ function BarPage() {
             <form onSubmit={handleSubmit}>
                 {/* Check if ingredients are pulled from api yet, if not then display loading ingredients... */}
                 {Array.isArray(ingredients) ?
-                    <select multiple style={{ height: '200px' }} onChange={handleChange}>
-                        {ingredients.map(ingredient => (
-                            <option value={ingredient} key={ingredient}>
-                                {ingredient}
-                            </option>
-                        ))}
-                    </select>
+                    <Autocomplete
+                        multiple
+                        options={ingredients}
+                        getOptionLabel={(option) => option}
+                        filterSelectedOptions
+                        onChange={(event, value) => setIngredientInput(value)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Ingredients"
+                                placeholder="Ingredients"
+                            />
+                        )}
+                    />
                     : <p>Loading ingredients...</p>}
                 <input type="submit" />
             </form>
@@ -72,7 +68,7 @@ function BarPage() {
             <ul>
                 {Array.isArray(barIngredients) ?
                     barIngredients.map(ingredient => (
-                        <BarIngredient ingredient={ingredient} key={ingredient.id}/>
+                        <BarIngredient ingredient={ingredient} key={ingredient.id} />
                     ))
                     : <li>Loading user ingredients...</li>
                 }
