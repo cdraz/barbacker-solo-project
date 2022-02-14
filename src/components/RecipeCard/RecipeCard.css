@@ -2,3 +2,11 @@
     height: 160px;
     width: 160px;
 }
+
+.ownedIngredient {
+    color: rgb(20, 175, 0)
+}
+
+.unownedIngredient {
+    color: red;
+}

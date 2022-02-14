@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import RecipeCard from '../RecipeCard/RecipeCard';
@@ -14,6 +14,8 @@ function SearchPage() {
   const dispatch = useDispatch();
   const discoverResults = useSelector( store => store.cocktaildb.discoverResultsReducer);
   const barIngredients = useSelector( store => store.bar.userIngredientsReducer);
+  const bar = useSelector(store => store.bar.userIngredientsReducer);
+
 
   // Declare handleSubmit
   const handleClick = event => {
@@ -29,6 +31,11 @@ function SearchPage() {
     });
   }
 
+  // Get bar ingredients on component load
+  useEffect(() => {
+    dispatch({ type: 'GET_BAR_INGREDIENTS' });
+  }, []);
+
   return (
     <div className="container">
       <div>
@@ -43,7 +50,7 @@ function SearchPage() {
       <Grid container>
         { Array.isArray(discoverResults) ? 
           discoverResults.map( recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={recipe} bar={bar}/>
           )) 
         : <Typography component="p">No results to display.</Typography>}
       </Grid>
