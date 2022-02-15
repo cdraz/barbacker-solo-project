@@ -31,7 +31,6 @@ function RecipeCard({ recipe, bar }) {
             payload: {}
         });
     };
-
     // Modal style setup
     const style = {
         position: 'absolute',
@@ -148,7 +147,7 @@ function RecipeCard({ recipe, bar }) {
                                 }
                                 <Button
                                     variant="text"
-                                    onClick={() => setOpen(false)}
+                                    onClick={handleClose}
                                 >
                                     Close
                                 </Button>

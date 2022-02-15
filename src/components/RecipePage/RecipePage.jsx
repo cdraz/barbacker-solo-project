@@ -32,8 +32,6 @@ function RecipePage() {
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
         >
           <Typography component="h3">
             Saved Recipes
@@ -56,18 +54,15 @@ function RecipePage() {
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
         >
           <Typography component="h3">
             My Recipes
           </Typography>
-
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <AddRecipeButton/>
+              <AddRecipeButton />
             </Grid>
             {Array.isArray(userRecipes) ?
               userRecipes.map(recipe => (

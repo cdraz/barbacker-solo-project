@@ -12,6 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
@@ -24,7 +25,6 @@ function UserRecipeCard({ recipe, bar }) {
 
     //  MUI modal setup
     const [detailsOpen, setDetailsOpen] = useState(false);
-    const handleDetailsClose = () => setDetailsOpen(false);
     const [editOpen, setEditOpen] = useState(false);
     const handleEditClose = () => window.alert('Please save changes or click cancel');
 
@@ -167,52 +167,48 @@ function UserRecipeCard({ recipe, bar }) {
                         />
                         <CardContent>
                             <form onSubmit={onSaveChanges}>
+                                <Stack spacing={2} sx={{ marginBottom: 2 }}>
+                                    <TextField
+                                        required
+                                        label="Drink Name"
+                                        variant="outlined"
+                                        defaultValue={recipe.name}
+                                        onChange={event => setDrinkNameInput(event.target.value)}
+                                    />
+                                    <Autocomplete
+                                        multiple
+                                        options={ingredients}
+                                        getOptionLabel={(option) => option}
+                                        limitTags={2}
+                                        filterSelectedOptions
+                                        defaultValue={recipe.ingredients}
+                                        onChange={(event, value) => setIngredientInput(value)}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Ingredients"
+                                                placeholder="Ingredients"
+                                            />
+                                        )}
+                                    />
+                                    <TextField
+                                        required
+                                        label="Instructions"
+                                        variant="outlined"
+                                        defaultValue={recipe.instructions}
+                                        multiline
+                                        rows={3}
+                                        onChange={event => setInstructionsInput(event.target.value)}
+                                    />
+                                </Stack>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            label="Drink Name"
-                                            variant="standard"
-                                            defaultValue={recipe.name}
-                                            onChange={event => setDrinkNameInput(event.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-
-                                        <Autocomplete
-                                            multiple
-                                            options={ingredients}
-                                            getOptionLabel={(option) => option}
-                                            filterSelectedOptions
-                                            defaultValue={recipe.ingredients}
-                                            onChange={(event, value) => setIngredientInput(value)}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    label="Ingredients"
-                                                    placeholder="Ingredients"
-                                                />
-                                            )}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            label="Instructions"
-                                            variant="standard"
-                                            defaultValue={recipe.instructions}
-                                            multiline
-                                            rows={3}
-                                            onChange={event => setInstructionsInput(event.target.value)}
-                                        />
-                                    </Grid>
                                     <Grid item xs={4}>
                                         <Button
                                             type="submit"
                                             variant="contained"
                                             size="small"
                                         >
-                                            Save Changes
+                                            Save 
                                         </Button>
                                     </Grid>
                                     <Grid item xs={4}>
@@ -238,7 +234,6 @@ function UserRecipeCard({ recipe, bar }) {
                                             Cancel
                                         </Button>
                                     </Grid>
-
                                 </Grid>
                             </form>
                         </CardContent>
