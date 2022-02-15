@@ -14,6 +14,13 @@ img {
   max-width: 100%;
 }
 
+#currentLocation {
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #753d73;
+  color: white;
+  text-align: center;
+}
 /* --------------------------------------------------------------------------------
 Container
 -------------------------------------------------------------------------------- */

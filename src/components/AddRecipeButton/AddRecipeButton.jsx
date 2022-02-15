@@ -20,7 +20,6 @@ function AddRecipeButton() {
 
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false);
 
     // Form input state variables
     const [drinkNameInput, setDrinkNameInput] = useState('');
@@ -60,6 +59,12 @@ function AddRecipeButton() {
 
         // Close add recipe view
         setOpen(false);
+
+        // Clear inputs
+        setDrinkNameInput();
+        setIngredientInput();
+        setInstructionsInput();
+        setImageInput();
     }
 
 
@@ -67,64 +72,84 @@ function AddRecipeButton() {
         <div>
             <Button
                 onClick={() => setOpen(true)}
-                variant="contained"
+                variant="outlined"
+                size="small"
             >
                 Add a Recipe
             </Button>
             <Modal
                 open={open}
-                onClose={handleClose}
                 sx={{ overflow: 'scroll' }}
             >
                 <Box sx={style}>
                     <Typography component={"h5"}> Add a Recipe</Typography>
+                    <br></br>
                     <form onSubmit={onAddRecipe}>
-                        <TextField
-                            required
-                            label="Drink Name"
-                            variant="standard"
-                            onChange={event => setDrinkNameInput(event.target.value)}
-                        />
-                        <Autocomplete
-                            multiple
-                            options={ingredients}
-                            getOptionLabel={(option) => option}
-                            filterSelectedOptions
-                            onChange={(event, value) => setIngredientInput(value)}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Ingredients"
-                                    placeholder="Ingredients"
-                                />
-                            )}
-                        />
-                        <TextField
-                            required
-                            label="Instructions"
-                            variant="standard"
-                            multiline
-                            rows={3}
-                            onChange={event => setInstructionsInput(event.target.value)}
-                        />
-                        <Button
-                            variant="outlined"
-                            component="label"
-                        >
-                            Upload Image
-                            <input
-                                type="file"
-                                accept=".jpg"
-                                onChange={event => setImageInput(event.target.files[0])}
-                                hidden
+                        <Stack spacing={2}>
+                            <TextField
+                                required
+                                label="Drink Name"
+                                variant="outlined"
+                                onChange={event => setDrinkNameInput(event.target.value)}
                             />
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                        >
-                            Add Recipe
-                        </Button>
+                            <Autocomplete
+                                multiple
+                                options={ingredients}
+                                getOptionLabel={(option) => option}
+                                filterSelectedOptions
+                                limitTags={2}
+                                onChange={(event, value) => setIngredientInput(value)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Ingredients"
+                                        placeholder="Ingredients"
+                                    />
+                                )}
+                            />
+                            <TextField
+                                required
+                                label="Instructions"
+                                variant="outlined"
+                                multiline
+                                rows={3}
+                                onChange={event => setInstructionsInput(event.target.value)}
+                            />
+                            <Button
+                                variant="outlined"
+                                component="label"
+                            >
+                                Upload Image
+                                <input
+                                    type="file"
+                                    accept=".jpg"
+                                    onChange={event => setImageInput(event.target.files[0])}
+                                    hidden
+                                />
+                            </Button>
+                            <Typography component="p">
+                                {imageInput ? imageInput.name : ''}
+                            </Typography>
+                        </Stack>
+                        <br></br>
+                        <Grid container spacing={2}>
+                            <Grid item xs={8}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                >
+                                    Add Recipe
+                                </Button>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Button
+                                    variant="text"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Cancel
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </form>
                 </Box>
             </Modal>

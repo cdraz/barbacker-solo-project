@@ -7,10 +7,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
@@ -23,7 +25,6 @@ function UserRecipeCard({ recipe, bar }) {
 
     //  MUI modal setup
     const [detailsOpen, setDetailsOpen] = useState(false);
-    const handleDetailsClose = () => setDetailsOpen(false);
     const [editOpen, setEditOpen] = useState(false);
     const handleEditClose = () => window.alert('Please save changes or click cancel');
 
@@ -64,11 +65,15 @@ function UserRecipeCard({ recipe, bar }) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 250,
+        width: 300,
+        minHeight: 400,
+        maxHeight: 650,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
+        overflow: 'scroll',
         p: 4,
+        padding: 3
     };
 
     return (
@@ -85,7 +90,7 @@ function UserRecipeCard({ recipe, bar }) {
                         alt={recipe.name}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom noWrap variant="h6" component="div">
                             {recipe.name}
                         </Typography>
                     </CardContent>
@@ -93,14 +98,18 @@ function UserRecipeCard({ recipe, bar }) {
             </Card>
             <Modal
                 open={detailsOpen}
-                onClose={handleDetailsClose}
-                sx={{ overflow: 'scroll' }}
             >
                 <Box key={recipe.id} sx={style}>
-                    {
-                        recipe ?
-                            <>
-                                <img src={recipe.image}></img>
+                    {recipe ?
+                        <Card sx={{ padding: 0, margin: 0, border: 'none', boxShadow: 'none' }}>
+                            <CardMedia
+                                component="img"
+                                height="220"
+                                width="200"
+                                image={recipe.image}
+                                alt={recipe.name}
+                            />
+                            <CardContent>
                                 <Typography variant="h6" component="h2">
                                     {recipe.name}
                                 </Typography>
@@ -113,22 +122,32 @@ function UserRecipeCard({ recipe, bar }) {
                                                 </li>
                                             ))}
                                         </ul>
-                                        <Typography component="p">
-                                            {recipe.instructions}
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                setDetailsOpen(false);
-                                                setEditOpen(true);
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
                                     </Grid>
                                 </Grid>
-                            </>
-                            : <Typography component="p">Loading recipe...</Typography>
+
+                                <Typography component="p">
+                                    {recipe.instructions}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        setDetailsOpen(false);
+                                        setEditOpen(true);
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant="text"
+                                    onClick={() => setDetailsOpen(false)}
+                                >
+                                    Close
+                                </Button>
+                            </CardActions>
+                        </Card>
+                        : <Typography component="p">Loading recipe...</Typography>
                     }
                 </Box>
             </Modal>
@@ -138,63 +157,87 @@ function UserRecipeCard({ recipe, bar }) {
                 sx={{ overflow: 'scroll' }}
             >
                 <Box sx={style}>
-                    <img src={recipe.image} />
-                    <form onSubmit={onSaveChanges}>
-                        <TextField
-                            required
-                            label="Drink Name"
-                            variant="standard"
-                            defaultValue={recipe.name}
-                            onChange={event => setDrinkNameInput(event.target.value)}
+                    <Card sx={{ padding: 0, margin: 0, border: 'none', boxShadow: 'none' }}>
+                        <CardMedia
+                            component="img"
+                            height="200"
+                            width="200"
+                            image={recipe.image}
+                            alt={recipe.name}
                         />
-                        <Autocomplete
-                            multiple
-                            options={ingredients}
-                            getOptionLabel={(option) => option}
-                            filterSelectedOptions
-                            defaultValue={recipe.ingredients}
-                            onChange={(event, value) => setIngredientInput(value)}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Ingredients"
-                                    placeholder="Ingredients"
-                                />
-                            )}
-                        />
-                        <TextField
-                            required
-                            label="Instructions"
-                            variant="standard"
-                            defaultValue={recipe.instructions}
-                            multiline
-                            rows={3}
-                            onChange={event => setInstructionsInput(event.target.value)}
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                        >
-                            Save Changes
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="text"
-                            onClick={() => {
-                                setEditOpen(false);
-                                setDetailsOpen(true);
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="text"
-                            onClick={onDelete}
-                        >
-                            Delete
-                        </Button>
-                    </form>
+                        <CardContent>
+                            <form onSubmit={onSaveChanges}>
+                                <Stack spacing={2} sx={{ marginBottom: 2 }}>
+                                    <TextField
+                                        required
+                                        label="Drink Name"
+                                        variant="outlined"
+                                        defaultValue={recipe.name}
+                                        onChange={event => setDrinkNameInput(event.target.value)}
+                                    />
+                                    <Autocomplete
+                                        multiple
+                                        options={ingredients}
+                                        getOptionLabel={(option) => option}
+                                        limitTags={2}
+                                        filterSelectedOptions
+                                        defaultValue={recipe.ingredients}
+                                        onChange={(event, value) => setIngredientInput(value)}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Ingredients"
+                                                placeholder="Ingredients"
+                                            />
+                                        )}
+                                    />
+                                    <TextField
+                                        required
+                                        label="Instructions"
+                                        variant="outlined"
+                                        defaultValue={recipe.instructions}
+                                        multiline
+                                        rows={3}
+                                        onChange={event => setInstructionsInput(event.target.value)}
+                                    />
+                                </Stack>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={4}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            size="small"
+                                        >
+                                            Save 
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Button
+                                            type="button"
+                                            variant="text"
+                                            onClick={onDelete}
+                                            size="small"
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Button
+                                            type="button"
+                                            variant="text"
+                                            onClick={() => {
+                                                setEditOpen(false);
+                                                setDetailsOpen(true);
+                                            }}
+                                            size="small"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </CardContent>
+                    </Card>
                 </Box>
             </Modal>
         </>

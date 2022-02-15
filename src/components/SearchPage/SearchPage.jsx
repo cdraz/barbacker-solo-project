@@ -58,10 +58,12 @@ function SearchPage() {
           />
         </form>
       </div>
-      <Grid container>
+      <Grid container spacing={2}>
         {Array.isArray(searchResults) ?
           searchResults.map(recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} bar={bar}/>
+            <Grid item xs={6}>
+              <RecipeCard key={recipe.id} recipe={recipe} bar={bar} />
+            </Grid>
           ))
           : <Typography component="p">No results to display.</Typography>}
       </Grid>

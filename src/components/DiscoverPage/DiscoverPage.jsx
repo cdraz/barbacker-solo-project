@@ -12,8 +12,8 @@ function SearchPage() {
 
   // Dispatch hook, store access
   const dispatch = useDispatch();
-  const discoverResults = useSelector( store => store.cocktaildb.discoverResultsReducer);
-  const barIngredients = useSelector( store => store.bar.userIngredientsReducer);
+  const discoverResults = useSelector(store => store.cocktaildb.discoverResultsReducer);
+  const barIngredients = useSelector(store => store.bar.userIngredientsReducer);
   const bar = useSelector(store => store.bar.userIngredientsReducer);
 
 
@@ -24,7 +24,7 @@ function SearchPage() {
     console.log(barIngredients);
     // TODO: get two random ingredients from bar
     let array = barIngredients
-    const random = array.sort(() => .5 - Math.random()).slice(0,2);
+    const random = array.sort(() => .5 - Math.random()).slice(0, 2);
     dispatch({
       type: 'GET_DISCOVER_RESULTS',
       payload: `${random[0].apiString},${random[1].apiString}`
@@ -47,12 +47,14 @@ function SearchPage() {
       >
         Show Me Recipes
       </Button>
-      <Grid container>
-        { Array.isArray(discoverResults) ? 
-          discoverResults.map( recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} bar={bar}/>
-          )) 
-        : <Typography component="p">No results to display.</Typography>}
+      <Grid container spacing={2}>
+        {Array.isArray(discoverResults) ?
+          discoverResults.map(recipe => (
+            <Grid item xs={6}>
+              <RecipeCard key={recipe.id} recipe={recipe} bar={bar} />
+            </Grid>
+          ))
+          : <Typography component="p">No results to display.</Typography>}
       </Grid>
     </div>
   );

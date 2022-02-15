@@ -191,7 +191,7 @@ router.post('/custom', rejectUnauthenticated, upload.single('image'), (req, res)
     })
 });
 
-router.put('/custom/:id/edit', rejectUnauthenticated, (req, res) => {
+router.put('/custom/:id/edit', rejectUnauthenticated, async (req, res) => {
   console.log(`in /api/custom/${req.params.id}/edit`, req.user, req.body);
   // Write SQL query to update recipe
   let queryText = `
