@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
@@ -37,13 +38,14 @@ function RecipeCard({ recipe, bar }) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 250,
-        maxHeight: 600,
+        width: 300,
+        minHeight: 400,
+        maxHeight: 650,
         bgcolor: 'background.paper',
-        border: '2px solid #000',
         boxShadow: 24,
         p: 4,
-        overflow: 'scroll'
+        overflow: 'scroll',
+        padding: 3
     };
 
     // Declare onSave
@@ -92,55 +94,70 @@ function RecipeCard({ recipe, bar }) {
             </Card>
             <Modal
                 open={open}
-                onClose={handleClose}
             >
                 <Box key={recipe.idDrink} sx={style}>
                     {
                         details.fullDetails ?
-                            <>
-                                <img src={recipe.strDrinkThumb}></img>
-                                <Typography variant="h6" component="h2">
-                                    {details.fullDetails.strDrink}
-                                </Typography>
-                                <Grid container spacing={1} columns={3}>
-                                    <Grid item>
-                                        <Typography component="p">
-                                            <ul>
-                                                {details.ingredients.map(ingredient => (
-                                                    ingredient.i ?
-                                                        <li key={ingredient.i} className={bar.some(barIngredient => barIngredient.apiString.toLowerCase() === ingredient.i.toLowerCase()) ? 'ownedIngredient' : 'unownedIngredient'}>
-                                                            {ingredient.m + ' ' + ingredient.i}
-                                                        </li>
-                                                        : null
-                                                ))}
-                                            </ul>
-                                        </Typography>
-                                        <Typography component="p">
-                                            {details.fullDetails.strInstructions}
-                                        </Typography>
-                                        {/* Check if the selected recipe is a saved recipe, if it is then render the remove button, if not render the save button */}
-                                        {savedRecipes.some(savedRecipe => savedRecipe.idDrink === recipe.idDrink) ?
-                                            <Button
-                                                onClick={onRemove}
-                                                variant="contained"
-                                            >
-                                                Remove
-                                            </Button>
-                                            :
-                                            <Button
-                                                onClick={onSave}
-                                                variant="contained"
-                                            >
-                                                Save
-                                            </Button>
-                                        }
+                            <Card sx={{ padding: 0, margin: 0, border: 'none', boxShadow: 'none' }}>
+                                <CardMedia
+                                    component="img"
+                                    height="250"
+                                    width="200"
+                                    image={recipe.strDrinkThumb}
+                                    alt={recipe.strDrink}
+                                />
+                                <CardContent>
+                                    <Typography variant="h6" component="h2">
+                                        {details.fullDetails.strDrink}
+                                    </Typography>
+                                    <Grid container spacing={1} columns={3}>
+                                        <Grid item>
+                                            <Typography component="p">
+                                                <ul>
+                                                    {details.ingredients.map(ingredient => (
+                                                        ingredient.i ?
+                                                            <li key={ingredient.i} className={bar.some(barIngredient => barIngredient.apiString.toLowerCase() === ingredient.i.toLowerCase()) ? 'ownedIngredient' : 'unownedIngredient'}>
+                                                                {ingredient.m + ' ' + ingredient.i}
+                                                            </li>
+                                                            : null
+                                                    ))}
+                                                </ul>
+                                            </Typography>
+                                            <Typography component="p">
+                                                {details.fullDetails.strInstructions}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </>
-                            : <CircularProgress />
+                                </CardContent>
+                                <CardActions>
+                                {/* Check if the selected recipe is a saved recipe, if it is then render the remove button, if not render the save button */}
+                                {savedRecipes.some(savedRecipe => savedRecipe.idDrink === recipe.idDrink) ?
+                                    <Button
+                                        onClick={onRemove}
+                                        variant="contained"
+                                    >
+                                        Remove
+                                    </Button>
+                                    :
+                                    <Button
+                                        onClick={onSave}
+                                        variant="contained"
+                                    >
+                                        Save
+                                    </Button>
+                                }
+                                <Button
+                                    variant="text"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Close
+                                </Button>
+                                </CardActions>
+                            </Card>
+                : <CircularProgress />
                     }
-                </Box>
-            </Modal>
+            </Box>
+        </Modal>
         </>
     )
 };
