@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function RecipeCard({ recipe, bar }) {
 
@@ -22,7 +23,13 @@ function RecipeCard({ recipe, bar }) {
 
     //  MUI modal setup for detail view
     const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        dispatch({
+            type: 'SET_SELECTED_RECIPE_DETAIL',
+            payload: {}
+        });
+    };
 
     // Modal style setup
     const style = {
@@ -31,10 +38,12 @@ function RecipeCard({ recipe, bar }) {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 250,
+        maxHeight: 600,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
+        overflow: 'scroll'
     };
 
     // Declare onSave
@@ -75,7 +84,7 @@ function RecipeCard({ recipe, bar }) {
                         alt={recipe.strDrink}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom noWrap variant="h6" component="div">
                             {recipe.strDrink}
                         </Typography>
                     </CardContent>
@@ -84,11 +93,10 @@ function RecipeCard({ recipe, bar }) {
             <Modal
                 open={open}
                 onClose={handleClose}
-                sx={{ overflow: 'scroll' }}
             >
                 <Box key={recipe.idDrink} sx={style}>
                     {
-                        details ?
+                        details.fullDetails ?
                             <>
                                 <img src={recipe.strDrinkThumb}></img>
                                 <Typography variant="h6" component="h2">
@@ -129,7 +137,7 @@ function RecipeCard({ recipe, bar }) {
                                     </Grid>
                                 </Grid>
                             </>
-                            : <Typography component="p">Loading recipe...</Typography>
+                            : <CircularProgress />
                     }
                 </Box>
             </Modal>

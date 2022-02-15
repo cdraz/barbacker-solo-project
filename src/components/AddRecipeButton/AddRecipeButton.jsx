@@ -67,7 +67,8 @@ function AddRecipeButton() {
         <div>
             <Button
                 onClick={() => setOpen(true)}
-                variant="contained"
+                variant="outlined"
+                size="small"
             >
                 Add a Recipe
             </Button>

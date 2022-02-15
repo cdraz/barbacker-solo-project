@@ -85,7 +85,7 @@ function UserRecipeCard({ recipe, bar }) {
                         alt={recipe.name}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom noWrap variant="h6" component="div">
                             {recipe.name}
                         </Typography>
                     </CardContent>
