@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { ReactComponent as LogoutIcon } from '../../icons/logout-line.svg';
+
 function LogOutButton(props) {
   const dispatch = useDispatch();
   return (
@@ -11,7 +13,7 @@ function LogOutButton(props) {
       className={props.className}
       onClick={() => dispatch({ type: 'LOGOUT' })}
     >
-      <img src="https://cdn-icons-png.flaticon.com/512/1286/1286853.png" alt="logout-button" style={{ height: 30, width: 30 }}/>
+      <LogoutIcon style={{ height: '30px', width: '30px', fill: '#fff' }} />
     </button>
   );
 }

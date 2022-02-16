@@ -9,9 +9,8 @@ import './Footer.css';
 function Footer() {
   return (
   <footer>
-    &copy; Prime Digital Academy
+    &copy; 
     <br></br>
-    <a href="https://www.flaticon.com/free-icons/bar" title="bar icons">Icons created by Freepik - Flaticon</a>
   </footer>
   )
 }

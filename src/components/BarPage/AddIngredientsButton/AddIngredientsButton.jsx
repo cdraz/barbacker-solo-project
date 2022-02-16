@@ -56,6 +56,7 @@ function AddIngredientsButton() {
             <Button
                 onClick={() => setOpen(true)}
                 variant="contained"
+                sx={{ width: '170px' }}
             >
                 Add Ingredients
             </Button>
@@ -65,26 +66,33 @@ function AddIngredientsButton() {
                 sx={{ overflow: 'scroll' }}
             >
                 <Box sx={style}>
-                    <Typography component={"h5"}> Add Ingredients</Typography>
+                    <Typography component="h2" align="center" sx={{ marginBottom: 3 }}> Add Ingredients</Typography>
                     <form onSubmit={handleSubmit}>
-                        {/* Check if ingredients are pulled from api yet, if not then display loading ingredients... */}
-                        {Array.isArray(ingredients) ?
-                            <Autocomplete
-                                multiple
-                                options={ingredients}
-                                getOptionLabel={(option) => option}
-                                filterSelectedOptions
-                                onChange={(event, value) => setIngredientInput(value)}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Ingredients"
-                                        placeholder="Ingredients"
-                                    />
-                                )}
-                            />
-                            : <p>Loading ingredients...</p>}
-                        <input type="submit" />
+                        <Stack spacing={2}>
+                            {/* Check if ingredients are pulled from api yet, if not then display loading ingredients... */}
+                            {Array.isArray(ingredients) ?
+                                <Autocomplete
+                                    multiple
+                                    options={ingredients}
+                                    getOptionLabel={(option) => option}
+                                    filterSelectedOptions
+                                    onChange={(event, value) => setIngredientInput(value)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Ingredients"
+                                            placeholder="Ingredients"
+                                        />
+                                    )}
+                                />
+                                : <p>Loading ingredients...</p>}
+                            <Button
+                                type="submit"
+                                variant="contained"
+                            >
+                                Add Selected Ingredients
+                            </Button>
+                        </Stack>
                     </form>
                 </Box>
             </Modal>
