@@ -11,10 +11,11 @@ function PopularPage() {
 
   // Dispatch hook, store access
   const dispatch = useDispatch();
-  const popularRecipes = useSelector(store => store.cocktaildb.popularReducer);
+  const popularRecipes = useSelector(store => store.recipes.popularReducer);
   const bar = useSelector(store => store.bar.userIngredientsReducer);
 
   useEffect(() => {
+    dispatch({ type: 'GET_POPULAR_RECIPES'});
     dispatch({ type: 'GET_BAR_INGREDIENTS' });
   }, []);
 

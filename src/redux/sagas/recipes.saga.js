@@ -97,9 +97,11 @@ function* updateUserRecipe(action) {
 function* getPopularRecipes() {
     try {
         console.log('in getPopularRecipes');
-        yield axios.get('/api/recipes/popular');
+        const response = yield axios.get('/api/recipes/popular');
+        const recipes = response.data.map( recipe => recipe.drinks[0]);
         yield put({
-            type: 'SET_POPULAR_RECIPES'
+            type: 'SET_POPULAR_RECIPES',
+            payload: recipes
         });
     }
     catch(err) {
