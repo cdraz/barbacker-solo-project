@@ -9,7 +9,7 @@ import './Footer.css';
 function Footer() {
   return (
   <footer>
-    &copy; Prime Digital Academy
+    &copy; 
     <br></br>
   </footer>
   )

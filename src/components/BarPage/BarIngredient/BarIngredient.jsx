@@ -1,10 +1,16 @@
 import { useDispatch } from 'react-redux';
 
+// MUI imports
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+
 function BarIngredient(ingredient) {
 
     // Dispatch hook
     const dispatch = useDispatch();
-    
+
     // Declare handleDelete
     const handleDelete = () => {
         console.log('in handleDelete');
@@ -16,12 +22,20 @@ function BarIngredient(ingredient) {
     }
 
     return (
-        <li key={ingredient.ingredient.id}>
-            {ingredient.ingredient.apiString}
-            <button onClick={handleDelete}>
-                ✕
-            </button>
-        </li>
+        <TableRow key={ingredient.ingredient.id}>
+            <TableCell align="left" sx={{ width: '90%' }}>
+                {ingredient.ingredient.apiString}
+            </TableCell>
+            <TableCell align="right" sx={{ width: '10%' }}>
+                <Button
+                    variant="text"
+                    onClick={handleDelete}
+                >
+                    ✕
+                </Button>
+
+            </TableCell>
+        </TableRow>
     )
 }
 

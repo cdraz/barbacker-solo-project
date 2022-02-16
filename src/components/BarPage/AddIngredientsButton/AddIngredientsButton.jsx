@@ -56,6 +56,7 @@ function AddIngredientsButton() {
             <Button
                 onClick={() => setOpen(true)}
                 variant="contained"
+                sx={{ width: '170px' }}
             >
                 Add Ingredients
             </Button>
