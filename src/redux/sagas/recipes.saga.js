@@ -18,6 +18,29 @@ function* getSavedRecipes() {
     }
 }
 
+function* saveRecipe(action) {
+    try {
+        console.log('in saveRecipe', action.payload);
+        yield axios.post('/api/recipes', { id: action.payload });
+    }
+    catch(err) {
+        console.error('Error with saveRecipe:', err);
+    } 
+}
+
+function* removeRecipe(action) {
+    try {
+        console.log('in removeRecipe', action.payload);
+        yield axios.delete(`/api/recipes/${action.payload}`);
+        yield put({
+            type: 'GET_SAVED_RECIPES'
+        });
+    }
+    catch(err) {
+        console.error('Error with saveRecipe:', err);
+    } 
+}
+
 function* getUserRecipes() {
     try {
         console.log('in getUserRecipes');
@@ -71,29 +94,18 @@ function* updateUserRecipe(action) {
     }
 }
 
-function* saveRecipe(action) {
+function* getPopularRecipes() {
     try {
-        console.log('in saveRecipe', action.payload);
-        yield axios.post('/api/recipes', { id: action.payload });
-    }
-    catch(err) {
-        console.error('Error with saveRecipe:', err);
-    } 
-}
-
-function* removeRecipe(action) {
-    try {
-        console.log('in removeRecipe', action.payload);
-        yield axios.delete(`/api/recipes/${action.payload}`);
+        console.log('in getPopularRecipes');
+        yield axios.get('/api/recipes/popular');
         yield put({
-            type: 'GET_SAVED_RECIPES'
+            type: 'SET_POPULAR_RECIPES'
         });
     }
     catch(err) {
-        console.error('Error with saveRecipe:', err);
-    } 
+        console.error('Error in getPopularRecipes', err);
+    }
 }
-
 
 function* recipesSaga() {
     yield takeLatest('GET_SAVED_RECIPES', getSavedRecipes);
@@ -103,6 +115,7 @@ function* recipesSaga() {
     yield takeLatest('UPDATE_USER_RECIPE', updateUserRecipe);
     yield takeLatest('REMOVE_RECIPE', removeRecipe);
     yield takeLatest('SAVE_RECIPE', saveRecipe);
+    yield takeLatest('GET_POPULAR_RECIPES', getPopularRecipes);
 }
 
 export default recipesSaga;
