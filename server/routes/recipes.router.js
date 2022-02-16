@@ -116,14 +116,14 @@ router.get('/custom', rejectUnauthenticated, (req, res) => {
     req.user.id // $1
   ];
   pool.query(queryText, queryParams)
-  .then( dbRes => {
-    console.log('GET /api/recipes/custom success');
-    res.send(dbRes.rows);
-  })
-  .catch( err => {
-    console.error('Error in GET /api/recipes/custom', err);
-    res.sendStatus(500);
-  });
+    .then(dbRes => {
+      console.log('GET /api/recipes/custom success');
+      res.send(dbRes.rows);
+    })
+    .catch(err => {
+      console.error('Error in GET /api/recipes/custom', err);
+      res.sendStatus(500);
+    });
 });
 
 router.post('/custom', rejectUnauthenticated, upload.single('image'), (req, res) => {
@@ -212,7 +212,7 @@ router.put('/custom/:id/edit', rejectUnauthenticated, async (req, res) => {
   ];
 
   for (let i = 0; i < req.body.ingredients.length; i++) {
-    queryText += `($1, $${i+4})`;
+    queryText += `($1, $${i + 4})`;
     queryParams.push(req.body.ingredients[i]);
     // If its the last ingredient being entered, add semicolon to end SQL query,
     // Otherwise add ', ' before concatenating next values
@@ -249,14 +249,14 @@ router.delete('/custom/:id/delete', rejectUnauthenticated, (req, res) => {
     req.user.id // $2
   ];
   pool.query(queryText, queryParams)
-  .then( dbRes => {
-    console.log(`DELETE /api/recipes/custom/${req.params.id}/delete success`);
-    res.sendStatus(200)
-  })
-  .catch( err => {
-    console.error(`Error in DELETE /api/recipes/custom/${req.params.id}/delete`, err);
-    res.sendStatus(500);    
-  })
+    .then(dbRes => {
+      console.log(`DELETE /api/recipes/custom/${req.params.id}/delete success`);
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.error(`Error in DELETE /api/recipes/custom/${req.params.id}/delete`, err);
+      res.sendStatus(500);
+    })
 });
 
 router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
@@ -280,6 +280,43 @@ router.delete('/:apiId', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     })
 });
+
+router.get('/popular', rejectUnauthenticated, (req, res) => {
+  console.log('in GET /api/recipes/popular', req.user);
+  // Write SQL query to get the 10 most saved recipes in Postgres
+  const queryText = `
+  SELECT COUNT("apiId"), "apiId"
+  FROM "saved_api_recipes"
+  GROUP BY "apiId"
+  ORDER BY COUNT("apiId") DESC
+  LIMIT 10;
+  `
+  pool.query(queryText)
+    .then(dbRes => {
+      console.log('GET success in /api/recipes/popular');
+      const popularRecipes = dbRes.rows;
+      // Create cocktaildb api endpoints based on the popular recipes returned from postgres
+      const endpoints = popularRecipes.map(recipe => (
+        `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/lookup.php?i=${recipe.apiId}`
+      ));
+      // Make our concurrent requests to the cocktaildb api, wrap up all responses and send to client together
+      Promise.all(endpoints.map(endpoint => axios.get(endpoint)))
+        .then(axios.spread((...responses) => {
+          res.send(responses.map(response => response.data));
+        }))
+        // Catch the cocktaildb api concurrent requests
+        .catch(err => {
+          console.error('Error in GET /api/recipes/popular', err);
+          res.sendStatus(500);
+        });
+    })
+    // Catch first query
+    .catch(err => {
+      console.error('Error in GET /api/recipes/popular', err);
+      res.sendStatus(500);
+    });
+
+})
 
 module.exports = router;
 
