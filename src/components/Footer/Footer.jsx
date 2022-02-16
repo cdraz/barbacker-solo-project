@@ -11,7 +11,6 @@ function Footer() {
   <footer>
     &copy; Prime Digital Academy
     <br></br>
-    <a href="https://www.flaticon.com/free-icons/bar" title="bar icons">Icons created by Freepik - Flaticon</a>
   </footer>
   )
 }

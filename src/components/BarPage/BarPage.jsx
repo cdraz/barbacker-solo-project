@@ -5,8 +5,6 @@ import AddIngredientsButton from './AddIngredientsButton/AddIngredientsButton';
 import BarIngredient from './BarIngredient/BarIngredient';
 
 // Material UI imports
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 
 function BarPage() {
 
@@ -38,9 +36,7 @@ function BarPage() {
 
     return (
         <div>
-            <h3>Bar Page</h3>
             <AddIngredientsButton />
-            <h5> My Bar</h5>
             <ul>
                 {Array.isArray(barIngredients) ?
                     barIngredients.map(ingredient => (
