@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import RecipeCard from '../RecipeCard/RecipeCard';
 
 // Material UI imports
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 function SearchPage() {
@@ -34,35 +36,43 @@ function SearchPage() {
   }
 
   useEffect(() => {
+    // Get bar ingredients
     dispatch({ type: 'GET_BAR_INGREDIENTS' });
   }, []);
 
   return (
     <div className="container">
       <div>
-        <h3>Search</h3>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="searchInput">
-            Search by ingredient
-          </label>
-          <input
-            id="searchInput"
-            type="text"
-            onChange={handleChange}
-            value={searchInput}
-            placeholder="Ingredient name"
-          />
-          <input
-            type="submit"
-            value="Search"
-          />
+          <Grid container spacing={2} sx={{ marginBottom: 3 }}>
+            <Grid item xs={8}>
+              <TextField
+                id="searchInput"
+                variant="outlined"
+                label="Search by ingredient"
+                onChange={handleChange}
+                value={searchInput}
+                placeholder="Ingredient name"
+                sx={{ display: 'flex' }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                type="submit"
+                value="Search"
+                variant="contained"
+              >
+                Search
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </div>
       <Grid container spacing={2}>
         {Array.isArray(searchResults) ?
           searchResults.map(recipe => (
-            <Grid item xs={6}>
-              <RecipeCard key={recipe.id} recipe={recipe} bar={bar} />
+            <Grid item xs={6} key={recipe.idDrink + 'grid'}>
+              <RecipeCard key={recipe.idDrink} recipe={recipe} bar={bar} />
             </Grid>
           ))
           : <Typography component="p">No results to display.</Typography>}

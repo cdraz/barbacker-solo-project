@@ -54,6 +54,10 @@ function RecipeCard({ recipe, bar }) {
             type: 'SAVE_RECIPE',
             payload: details.fullDetails.idDrink
         });
+        // Get saved recipes to update buttons for saved/unsaved recipes
+        dispatch({
+            type: 'GET_SAVED_RECIPES'
+        });
     };
 
     // Declare onRemove
@@ -133,9 +137,9 @@ function RecipeCard({ recipe, bar }) {
                                 {savedRecipes.some(savedRecipe => savedRecipe.idDrink === recipe.idDrink) ?
                                     <Button
                                         onClick={onRemove}
-                                        variant="contained"
+                                        variant="outlined"
                                     >
-                                        Remove
+                                        Unsave
                                     </Button>
                                     :
                                     <Button
