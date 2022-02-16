@@ -52,6 +52,14 @@ function Nav() {
             </Link>
 
             <Link
+              className={selected === 'popular' ? "navLink currentUrl" : "navLink"}
+              to="/popular"
+              onClick={() => setSelected('popular')}
+            >
+              <img src="https://cdn-icons.flaticon.com/png/512/4801/premium/4801603.png?token=exp=1645025506~hmac=564c4b18998b1cf234b4054a0cc49d21" alt="idea-icon" style={{ height: 30, width: 30 }} />
+            </Link>
+
+            <Link
               className={selected === 'recipes' ? "navLink currentUrl" : "navLink"}
               to="/recipes"
               onClick={() => setSelected('recipes')}
