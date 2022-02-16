@@ -16,9 +16,10 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import SearchPage from '../SearchPage/SearchPage';
 import BarPage from '../BarPage/BarPage';
 import UserPage from '../UserPage/UserPage';
-import InfoPage from '../DiscoverPage/DiscoverPage';
+import DiscoverPage from '../DiscoverPage/DiscoverPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
+import PopularPage from '../PopularPage/PopularPage';
 import RecipePage from '../RecipePage/RecipePage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
@@ -61,6 +62,7 @@ function App() {
             <Route exact path="/bar">My Bar</Route>
             <Route exact path="/search">Search</Route>
             <Route exact path="/discover">Discover</Route>
+            <Route exact path="/popular">Popular</Route>
             <Route exact path="/recipes">Recipes</Route>
           </div>
           <Switch>
@@ -93,7 +95,15 @@ function App() {
               exact
               path="/discover"
             >
-              <InfoPage />
+              <DiscoverPage />
+            </ProtectedRoute>
+
+            <ProtectedRoute
+              // logged in shows DiscoverPage else shows LoginPage
+              exact
+              path="/popular"
+            >
+              <PopularPage />
             </ProtectedRoute>
 
             <ProtectedRoute
