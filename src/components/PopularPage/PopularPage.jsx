@@ -24,8 +24,8 @@ function PopularPage() {
       <Grid container spacing={2}>
         {Array.isArray(popularRecipes) ?
           popularRecipes.map(recipe => (
-            <Grid item xs={6}>
-              <RecipeCard key={recipe.id} recipe={recipe} bar={bar} />
+            <Grid item xs={6} key={recipe.idDrink + 'grid'}>
+              <RecipeCard key={recipe.idDrink} recipe={recipe} bar={bar} />
             </Grid>
           ))
           : <Typography component="p">No results to display.</Typography>}
