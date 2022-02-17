@@ -38,16 +38,15 @@ function SearchPage() {
 
   return (
     <div className="container">
-      <div>
-        <h3>Discover</h3>
-      </div>
-      <Button
-        variant="contained"
-        onClick={handleClick}
-      >
-        Show Me Recipes
-      </Button>
       <Grid container spacing={2}>
+        <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            onClick={handleClick}
+          >
+            Give me ideas!
+          </Button>
+        </Grid>
         {Array.isArray(discoverResults) ?
           discoverResults.map(recipe => (
             <Grid item xs={6}>
