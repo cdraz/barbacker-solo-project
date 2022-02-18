@@ -315,8 +315,44 @@ router.get('/popular', rejectUnauthenticated, (req, res) => {
       console.error('Error in GET /api/recipes/popular', err);
       res.sendStatus(500);
     });
+});
 
-})
+router.get('/discover', rejectUnauthenticated, async (req, res) => {
+  try {
+    // GET current user's ingredients from Postgres
+    const queryText = `
+    SELECT ARRAY_AGG("apiString") AS "barIngredients"
+    FROM "bar_ingredients"
+    WHERE "userId" = $1;
+  `
+    const queryParams = [req.user.id];
+    const dbRes = await pool.query(queryText, queryParams)
+    const barIngredients = dbRes.rows[0].barIngredients;
+    // Make 5 endpoints for 5 different random searches based on requesting user's bar ingredients
+    // We make 5 to reduce chance of a search returning zero results
+    // Then take the first response that has at least one recipe and send it to the client
+    const randomArrays = [
+      barIngredients.slice().sort(() => .5 - Math.random()),
+      barIngredients.slice().sort(() => .5 - Math.random()),
+      barIngredients.slice().sort(() => .5 - Math.random()),
+      barIngredients.slice().sort(() => .5 - Math.random()),
+      barIngredients.slice().sort(() => .5 - Math.random())
+    ];
+    const endpoints = randomArrays.map(arr => `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API_KEY}/filter.php?i=${arr[0]},${arr[1]}`);
+
+    const responsesAllData = await Promise.all(endpoints.map(endpoint => axios.get(endpoint)));
+
+    const responses = responsesAllData.map(response => response.data.drinks);
+
+    const recipesToSend = responses.find(response => Array.isArray(response));
+
+    res.send(recipesToSend);
+  }
+  catch (err) {
+    console.error('Error in GET /api/recipes/discover', err);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;
 

@@ -21,14 +21,14 @@ function* getIngredients() {
 
 // getDiscoverResults sends request to server asking for results from cocktaildb api
 // based on query sent from client
-function* getDiscoverResults(action) {
+function* getDiscoverResults() {
     console.log('in getDiscoverResults');
     try {
-       let response = yield axios.get(`/api/recipes/search/${action.payload}`);
+       let response = yield axios.get(`/api/recipes/discover`);
        yield put({
            type: 'SET_DISCOVER_RESULTS',
            // We only want the array of drinks that are returned so set those as state
-           payload: response.data.drinks
+           payload: response.data
        });
     }
     catch(err) {
