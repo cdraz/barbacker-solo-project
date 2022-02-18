@@ -16,7 +16,7 @@ function Nav() {
   const user = useSelector((store) => store.user);
 
   // Set state variable
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState('bar');
 
   return (
     <div className="nav">
