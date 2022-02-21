@@ -23,9 +23,6 @@ function BarPage() {
     const barIngredients = useSelector(store => store.bar.userIngredientsReducer);
     const dispatch = useDispatch();
 
-    // Set state variables
-    const [ingredientInput, setIngredientInput] = useState([]);
-
     // Call getIngredients on component load
     useEffect(() => {
         // Get ingredients from API for add form

@@ -10,7 +10,6 @@ import Grid from '@mui/material/Grid';
 import RegisterForm from '../RegisterForm/RegisterForm';
 
 function LandingPage() {
-  const [heading, setHeading] = useState('Welcome');
   const history = useHistory();
 
   const onLogin = (event) => {
@@ -19,7 +18,7 @@ function LandingPage() {
 
   return (
     <div className="container">
-      <h2>{heading}</h2>
+      <h2>Welcome to Barbacker! Please log in or register to continue.</h2>
           <RegisterForm />
           <center>
             <h4>Already a Member?</h4>

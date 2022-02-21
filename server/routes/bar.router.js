@@ -11,7 +11,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     console.log('in GET /api/bar');
     
     // Write SQL query
-    const queryText = 'SELECT * FROM "bar_ingredients" WHERE "userId" = $1';
+    const queryText = 'SELECT * FROM "bar_ingredients" WHERE "userId" = $1 ORDER BY "apiString";';
     const queryParams = [req.user.id];
 
     // Send query to Postgres

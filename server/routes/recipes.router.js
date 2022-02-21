@@ -12,7 +12,7 @@ const upload = multer();
 
 router.get('/', rejectUnauthenticated, (req, res) => {
   // GET current user's saved recipes from Postgres
-  // Write our SQL query
+  // Write our SQL query  
   const queryText = `
     SELECT * FROM "saved_api_recipes"
     WHERE "userId" = $1;
