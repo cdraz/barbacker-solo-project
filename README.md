@@ -10,7 +10,7 @@ This app is currently designed for mobile web browsing. For the best experience,
 
 ## Installation & Usage
 
-**This app requires a third party API key to function, and as a result will not be available to use until deployed. Full functionality and usage will be available on 2/21/21 after the application is deployed to Heroku.**
+**This app requires a third party API key to function, and as a result will not be available to use until deployed. Full functionality and usage will be available after the application is deployed to Heroku.**
 
 ## Technologies
 
