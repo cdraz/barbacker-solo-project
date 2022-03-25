@@ -10,7 +10,15 @@ This app is currently designed for mobile web browsing. For the best experience,
 
 ## Installation & Usage
 
-**This app requires a third party API key to function, and as a result will not be available to use until deployed. Full functionality and usage will be available after the application is deployed to Heroku.**
+You will need node to run this application, as well as an API key from TheCocktailDB (https://www.thecocktaildb.com/).
+
+Fork and clone this repo, and run "npm install" to install dependencies.
+
+You will need your API key as an environment variable to access ingredients and recipes.
+
+Using the "database.sql" file, set up your database using a Postgres GUI like Postico.
+
+Run "npm run server" and "npm run client" to boot up the application, then navigate to localhost:5000 in a web browser to access it.
 
 ## Technologies
 
